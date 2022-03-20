@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarberStore.Web", "BarberStore.Web\BarberStore.Web.csproj", "{3732674A-8395-42B8-8E85-14D058B76F93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BarberStore.Web", "BarberStore.Web\BarberStore.Web.csproj", "{3732674A-8395-42B8-8E85-14D058B76F93}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarberStore.Core", "BarberStore.Core\BarberStore.Core.csproj", "{BE4AC18A-E1D3-45DA-9B5D-B2A758460CEF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BarberStore.Core", "BarberStore.Core\BarberStore.Core.csproj", "{BE4AC18A-E1D3-45DA-9B5D-B2A758460CEF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarberStore.Infrastructure", "BarberStore.Data\BarberStore.Infrastructure.csproj", "{D3994BB9-AD66-4567-BE6F-7995D759073D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BarberStore.Infrastructure", "BarberStore.Data\BarberStore.Infrastructure.csproj", "{D3994BB9-AD66-4567-BE6F-7995D759073D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

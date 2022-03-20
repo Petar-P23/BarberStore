@@ -1,16 +1,11 @@
-using BarberStore.Infrastructure.Data;
 using BarberStore.Web.Extensions;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("ApplicationDbContextConnection");builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
-// Add services to the container.
-builder.Services.AddApplicationDbContexts(builder.Configuration);
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddApplicationDbContexts(builder.Configuration);
+builder.Services.AddApplicationIdentity();
+builder.Services.AddRazorPages();
+
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddApplicationServices();

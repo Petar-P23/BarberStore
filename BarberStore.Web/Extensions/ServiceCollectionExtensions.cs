@@ -1,4 +1,6 @@
 ﻿using BarberStore.Infrastructure.Data;
+using BarberStore.Infrastructure.Data.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace BarberStore.Web.Extensions
@@ -8,6 +10,16 @@ namespace BarberStore.Web.Extensions
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
 
+            return services;
+        }
+
+        public static IServiceCollection AddApplicationIdentity(this IServiceCollection services)
+        {
+            services
+                .AddDefaultIdentity<ApplicationUser>(options =>
+                    options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
             return services;
         }
 
