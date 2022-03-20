@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using static BarberStore.Infrastructure.Data.Constants.ValidationConstants;
 
 namespace BarberStore.Infrastructure.Data.Models;
@@ -15,6 +16,9 @@ public class Product
     public string? Description { get; set; }
     [Required]
     public decimal Price { get; set; }
+    public Category Category { get; set; }
+    [ForeignKey(nameof(Category))]
+    public Guid CategoryId { get; set; }
 
     public IEnumerable<OrderProduct> OrderProducts { get; set; } = new List<OrderProduct>();
     public IEnumerable<CartProduct> CartProducts { get; set; } = new List<CartProduct>();
