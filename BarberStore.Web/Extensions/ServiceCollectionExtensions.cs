@@ -8,9 +8,21 @@ namespace BarberStore.Web.Extensions
 {
     public static class ServiceCollectionExtension
     {
-        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
         {
             services.AddScoped<IApplicationDbRepository, ApplicationDbRepository>();
+
+            services.AddAuthentication()
+                .AddFacebook(options =>
+                {
+                    options.ClientId = config["Authentication:Facebook:ClientId"];
+                    options.ClientSecret = config["Authentication:Facebook:ClientSecret"];
+                })
+                .AddGoogle(options =>
+                {
+                    options.ClientId = config["Authentication:Google:ClientId"];
+                    options.ClientSecret = config["Authentication:Google:ClientSecret"];
+                });
             return services;
         }
 
