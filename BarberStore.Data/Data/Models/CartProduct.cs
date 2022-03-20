@@ -15,4 +15,7 @@ public class CartProduct
     [Required]
     [DefaultValue(1)]
     public int Quantity { get; set; }
+    [Required]
+    [DefaultValue(false)]
+    public bool Ordered { get; set; }
 }
