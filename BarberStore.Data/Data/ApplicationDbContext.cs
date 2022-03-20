@@ -17,6 +17,11 @@ namespace BarberStore.Infrastructure.Data
             builder.Entity<OrderProduct>().HasKey(e => new { e.OrderId, e.ProductId });
             builder.Entity<CartProduct>().HasKey(e => new { e.CartId, e.ProductId });
 
+            builder.Entity<ApplicationUser>()
+                .HasOne(e => e.Cart)
+                .WithOne(e => e.User)
+                .OnDelete(DeleteBehavior.Restrict);
+
             base.OnModelCreating(builder);
         }
 

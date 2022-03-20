@@ -11,5 +11,5 @@ public class Cart
     [Required]
     [ForeignKey(nameof(User))]
     public string? UserId { get; set; }
-    public IEnumerable<CartProduct> CartProducts { get; set; } = new List<CartProduct>();
+    public IList<CartProduct> CartProducts { get; set; } = new List<CartProduct>();
 }

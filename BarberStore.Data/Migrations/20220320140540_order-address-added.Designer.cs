@@ -4,16 +4,18 @@ using BarberStore.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace BarberStore.Web.Data.Migrations
+namespace BarberStore.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220320140540_order-address-added")]
+    partial class orderaddressadded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -79,9 +81,6 @@ namespace BarberStore.Web.Data.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("CartId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -137,9 +136,6 @@ namespace BarberStore.Web.Data.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CartId")
-                        .IsUnique();
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -216,9 +212,11 @@ namespace BarberStore.Web.Data.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Carts");
                 });
@@ -271,9 +269,6 @@ namespace BarberStore.Web.Data.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("TimeOfOrdering")
                         .HasColumnType("datetime2");
 
@@ -318,11 +313,6 @@ namespace BarberStore.Web.Data.Migrations
                     b.Property<string>("Description")
                         .HasMaxLength(400)
                         .HasColumnType("nvarchar(400)");
-
-                    b.Property<string>("ImagePath")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -578,17 +568,6 @@ namespace BarberStore.Web.Data.Migrations
                     b.Navigation("PublishUser");
                 });
 
-            modelBuilder.Entity("BarberStore.Infrastructure.Data.Models.ApplicationUser", b =>
-                {
-                    b.HasOne("BarberStore.Infrastructure.Data.Models.Cart", "Cart")
-                        .WithOne("User")
-                        .HasForeignKey("BarberStore.Infrastructure.Data.Models.ApplicationUser", "CartId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Cart");
-                });
-
             modelBuilder.Entity("BarberStore.Infrastructure.Data.Models.Appointment", b =>
                 {
                     b.HasOne("BarberStore.Infrastructure.Data.Models.ApplicationUser", "User")
@@ -609,6 +588,17 @@ namespace BarberStore.Web.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("PublishUser");
+                });
+
+            modelBuilder.Entity("BarberStore.Infrastructure.Data.Models.Cart", b =>
+                {
+                    b.HasOne("BarberStore.Infrastructure.Data.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BarberStore.Infrastructure.Data.Models.CartProduct", b =>
@@ -743,9 +733,6 @@ namespace BarberStore.Web.Data.Migrations
             modelBuilder.Entity("BarberStore.Infrastructure.Data.Models.Cart", b =>
                 {
                     b.Navigation("CartProducts");
-
-                    b.Navigation("User")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("BarberStore.Infrastructure.Data.Models.Category", b =>

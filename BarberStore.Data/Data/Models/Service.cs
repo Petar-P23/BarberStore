@@ -14,5 +14,5 @@ public class Service
     public decimal Price { get; set; }
     [MaxLength(ServiceDescriptionMaxLength)]
     public string? Description { get; set; }
-    public IEnumerable<Appointment> Appointments { get; set; } = new List<Appointment>();
+    public IList<Appointment> Appointments { get; set; } = new List<Appointment>();
 }

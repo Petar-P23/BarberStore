@@ -10,5 +10,5 @@ public class Category
     [Required]
     [MaxLength(CategoryNameMaxLength)]
     public string? Name { get; set; }
-    public IEnumerable<Product> Products { get; set; } = new List<Product>();
+    public IList<Product> Products { get; set; } = new List<Product>();
 }

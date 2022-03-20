@@ -1,5 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using BarberStore.Infrastructure.Data.Enums;
+using static BarberStore.Infrastructure.Data.Constants.ValidationConstants;
 
 namespace BarberStore.Infrastructure.Data.Models;
 
@@ -10,7 +13,11 @@ public class Order
     public ApplicationUser User { get; set; }
     [ForeignKey(nameof(User))]
     public string? UserId { get; set; }
-    public IEnumerable<OrderProduct> OrderProducts { get; set; } = new List<OrderProduct>();
     [Required]
     public DateTime TimeOfOrdering { get; set; }
+    [Required] 
+    [MaxLength(OrderAddressMaxLength)]
+    public string? Address { get; set; }
+    public Status Status { get; set; } = Status.Ongoing;
+    public IList<OrderProduct> OrderProducts { get; set; } = new List<OrderProduct>();
 }

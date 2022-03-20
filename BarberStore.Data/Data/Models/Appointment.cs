@@ -17,5 +17,5 @@ public class Appointment
     [ForeignKey(nameof(User))]
     public string? UserId { get; set; }
 
-    public IEnumerable<Service> ServicesToDo { get; set; } = new List<Service>();
+    public IList<Service> ServicesToDo { get; set; } = new List<Service>();
 }

@@ -14,4 +14,5 @@ public static class ValidationConstants
     public const int CategoryNameMaxLength = 100;
     public const int UserNamesMaxLength = 100;
     public const int StaffMemberPhoneNumberMaxLength = 100;
+    public const int OrderAddressMaxLength = 300;
 }
