@@ -16,5 +16,6 @@ public class Product
     [Required]
     public decimal Price { get; set; }
 
-    public IEnumerable<Order> Orders { get; set; } = new List<Order>();
+    public IEnumerable<OrderProduct> OrderProducts { get; set; } = new List<OrderProduct>();
+    public IEnumerable<CartProduct> CartProducts { get; set; } = new List<CartProduct>();
 }

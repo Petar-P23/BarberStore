@@ -1,5 +1,6 @@
 ﻿using BarberStore.Infrastructure.Data;
 using BarberStore.Infrastructure.Data.Models;
+using BarberStore.Infrastructure.Data.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,7 +10,7 @@ namespace BarberStore.Web.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-
+            services.AddScoped<IApplicationDbRepository, ApplicationDbRepository>();
             return services;
         }
 

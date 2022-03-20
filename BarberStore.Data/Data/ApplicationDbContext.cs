@@ -1,4 +1,5 @@
-﻿using BarberStore.Infrastructure.Data.Models;
+﻿using System.Xml.XPath;
+using BarberStore.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,14 @@ namespace BarberStore.Infrastructure.Data
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<OrderProduct>().HasKey(e => new { e.OrderId, e.ProductId });
+            builder.Entity<CartProduct>().HasKey(e => new { e.CartId, e.ProductId });
+
+            base.OnModelCreating(builder);
+        }
+
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<Announcement> Announcements { get; set; }
         public DbSet<Article> Articles { get; set; }
@@ -20,5 +29,8 @@ namespace BarberStore.Infrastructure.Data
         public DbSet<Service> Services { get; set; }
         public DbSet<StaffMember> StaffMembers { get; set; }
         public DbSet<Store> Stores { get; set; }
+        public DbSet<Cart> Carts { get; set; }
+        public DbSet<CartProduct> CartProducts { get; set; }
+        public DbSet<OrderProduct> OrderProducts { get; set; }
     }
 }
