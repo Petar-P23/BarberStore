@@ -1,7 +1,4 @@
-﻿using BarberStore.Infrastructure.Data.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace BarberStore.Web.Areas.Administration.Controllers
 {
