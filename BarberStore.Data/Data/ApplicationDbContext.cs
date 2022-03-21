@@ -1,5 +1,4 @@
-﻿using System.Xml.XPath;
-using BarberStore.Infrastructure.Data.Models;
+﻿using BarberStore.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

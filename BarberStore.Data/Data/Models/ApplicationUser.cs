@@ -1,7 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.CodeAnalysis;
-using Microsoft.AspNetCore.Identity;
 using static BarberStore.Infrastructure.Data.Constants.ValidationConstants;
 
 namespace BarberStore.Infrastructure.Data.Models;
