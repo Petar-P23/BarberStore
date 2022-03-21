@@ -1,4 +1,6 @@
-﻿using BarberStore.Infrastructure.Data;
+﻿using BarberStore.Core.Contracts;
+using BarberStore.Core.Services;
+using BarberStore.Infrastructure.Data;
 using BarberStore.Infrastructure.Data.Models;
 using BarberStore.Infrastructure.Data.Repositories;
 using Microsoft.AspNetCore.Identity;
@@ -10,7 +12,9 @@ namespace BarberStore.Web.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
         {
-            services.AddScoped<IApplicationDbRepository, ApplicationDbRepository>();
+            services
+                .AddScoped<IApplicationDbRepository, ApplicationDbRepository>()
+                .AddScoped<IStoreService, StoreService>();
 
             services.AddAuthentication()
                 .AddFacebook(options =>

@@ -1,6 +1,6 @@
-﻿using System.Diagnostics;
-using BarberStore.Web.Models;
+﻿using BarberStore.Web.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace BarberStore.Web.Controllers
 {
