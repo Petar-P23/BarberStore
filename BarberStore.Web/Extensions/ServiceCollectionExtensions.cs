@@ -14,7 +14,9 @@ namespace BarberStore.Web.Extensions
         {
             services
                 .AddScoped<IApplicationDbRepository, ApplicationDbRepository>()
-                .AddScoped<IStoreService, StoreService>();
+                .AddScoped<IStoreService, StoreService>()
+                .AddScoped<IAppointmentService, AppointmentService>()
+                .AddScoped<IContentService, ContentService>();
 
             services.AddAuthentication()
                 .AddFacebook(options =>
