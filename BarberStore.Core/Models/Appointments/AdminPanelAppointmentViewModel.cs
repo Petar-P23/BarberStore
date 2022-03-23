@@ -2,7 +2,7 @@
 
 namespace BarberStore.Core.Models.Appointments;
 
-public class AdminPanelAppointmentModel : CalendarAppointmentViewModel
+public class AdminPanelAppointmentViewModel : CalendarAppointmentViewModel
 {
     public string? UserId { get; set; }
     public IEnumerable<ServiceModel> Services { get; set; }

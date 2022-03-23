@@ -13,6 +13,12 @@ namespace BarberStore.Web.Controllers
             this._logger = logger;
         }
 
+        [Route("/")]
+        public IActionResult Welcome()
+        {
+            return this.Ok();
+        }
+
         public IActionResult Index()
         {
             return this.View();

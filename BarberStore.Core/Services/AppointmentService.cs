@@ -26,7 +26,6 @@ public class AppointmentService : IAppointmentService
             {
                 throw new ArgumentException(AppointmentInvalidDateException);
             }
-
             var services = await this.repo
                 .All<Service>()
                 .Where(s => model.Services.Contains(s.Id.ToString()))
@@ -168,11 +167,11 @@ public class AppointmentService : IAppointmentService
 
         return appointments;
     }
-    public async Task<IEnumerable<AdminPanelAppointmentModel>> GetAllPendingAppointments()
+    public async Task<IEnumerable<AdminPanelAppointmentViewModel>> GetAllPendingAppointments()
     {
         var appointments = await this.repo.All<Appointment>()
             .Where(a => a.Status == Status.Pending)
-            .Select(a => new AdminPanelAppointmentModel
+            .Select(a => new AdminPanelAppointmentViewModel
             {
                 Start = a.Start,
                 UserId = a.UserId,

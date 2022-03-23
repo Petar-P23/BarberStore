@@ -17,6 +17,7 @@ public interface IAppointmentService
     /// Used to edit an appointment.
     /// </summary>
     /// <param name="userId">The user who owns the appointment.</param>
+    /// <param name="appointmentId"></param>
     /// <param name="model">The model of the new appointment.</param>
     /// <returns>True if the edit is successful, false and an error message if it fails.</returns>
     public Task<(bool, string)> EditAppointment(string userId, string appointmentId, AppointmentModel model);
@@ -33,7 +34,7 @@ public interface IAppointmentService
     /// <param name="userId">The user who owns the appointment.</param>
     /// <param name="appointmentId">The appointment's id.</param>
     /// <param name="status">The new status of the appointment.</param>
-    /// <returns></returns>
+    /// <returns>True if change is successful, false and an error message if it fails.</returns>
     public Task<(bool, string)> ChangeAppointmentStatus(string userId, string appointmentId, Status status);
     /// <summary>
     /// Used to get appointments for the calendar.
@@ -51,5 +52,5 @@ public interface IAppointmentService
     /// Used to get all appointments in the administration panel.
     /// </summary>
     /// <returns>All appointments with status pending and their services.</returns>
-    public Task<IEnumerable<AdminPanelAppointmentModel>> GetAllPendingAppointments();
+    public Task<IEnumerable<AdminPanelAppointmentViewModel>> GetAllPendingAppointments();
 }

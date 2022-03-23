@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -13,7 +13,6 @@
   <ItemGroup>
     <Folder Include="Contracts\" />
     <Folder Include="Constants\" />
-    <Folder Include="Models\Appointments\" />
     <Folder Include="Common\" />
   </ItemGroup>
 
