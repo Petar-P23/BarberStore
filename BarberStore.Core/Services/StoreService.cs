@@ -1,11 +1,12 @@
-﻿using BarberStore.Core.Contracts;
+﻿using BarberStore.Core.Common;
+using BarberStore.Core.Contracts;
 using BarberStore.Core.Models.Store;
 using BarberStore.Infrastructure.Data.Enums;
 using BarberStore.Infrastructure.Data.Models;
 using BarberStore.Infrastructure.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using BarberStore.Core.Common;
+using static BarberStore.Core.Constants.ExceptionMessageConstants;
 
 namespace BarberStore.Core.Services;
 
@@ -20,18 +21,18 @@ public class StoreService : IStoreService
 
     public async Task<StorePageViewModel> GetStorePage(int page, int size, string category = "")
     {
-        return await GetStorePage(page, size, p => p.Price, category);
+        return await this.GetStorePage(page, size, p => p.Price, category);
     }
 
     public async Task<StorePageViewModel> GetStorePage(int page, int size, Expression<Func<Product, object>> orderByExpression, string category = "")
     {
         var noFilter = string.IsNullOrWhiteSpace(category);
-        var pageCount = await GetProductPagesCount(size, p => p.Category.Name == category || noFilter);
+        var pageCount = await this.GetProductPagesCount(size, p => p.Category.Name == category || noFilter);
         if (page > pageCount) page = 1;
 
         Guard.AgainstNull(orderByExpression, nameof(orderByExpression));
 
-        var products = await repo.All<Product>()
+        var products = await this.repo.All<Product>()
             .Where(p => p.Category.Name == category || noFilter)
             .OrderBy(orderByExpression)
             .Skip(page * size)
@@ -55,7 +56,7 @@ public class StoreService : IStoreService
     {
         Guard.AgainstNull(filterExpression, nameof(filterExpression));
 
-        return (int)Math.Ceiling(await repo.All<Product>()
+        return (int)Math.Ceiling(await this.repo.All<Product>()
             .Where(filterExpression)
             .CountAsync() / (double)size);
     }
@@ -64,7 +65,7 @@ public class StoreService : IStoreService
     {
         Guard.AgainstNullOrWhiteSpaceString(productId, nameof(productId));
 
-        var product = await repo.All<Product>()
+        var product = await this.repo.All<Product>()
             .Where(p => p.Id.ToString() == productId)
             .Select(p => new ProductPageViewModel
             {
@@ -78,16 +79,16 @@ public class StoreService : IStoreService
         return product;
     }
 
-    public async Task<bool> AddProductToCart(string? userId, string? productId, int quantity = 1)
+    public async Task<(bool, string)> AddProductToCart(string? userId, string? productId, int quantity = 1)
     {
         try
         {
-            var user = await repo.GetByIdAsync<ApplicationUser>(userId);
+            var user = await this.repo.GetByIdAsync<ApplicationUser>(userId);
             Guard.AgainstNull(user, nameof(user));
 
             var cart = user.Cart ?? new Cart { User = user };
 
-            var product = await repo.GetByIdAsync<Product>(productId);
+            var product = await this.repo.GetByIdAsync<Product>(productId);
             Guard.AgainstNull(product, nameof(product));
 
             cart.CartProducts.Add(new CartProduct
@@ -96,22 +97,22 @@ public class StoreService : IStoreService
                 Quantity = quantity
             });
 
-            await repo.AddAsync(cart);
-            await repo.SaveChangesAsync();
+            await this.repo.AddAsync(cart);
+            await this.repo.SaveChangesAsync();
         }
         catch (Exception)
         {
-            return false;
+            return (false, UnexpectedErrorMessage);
         }
 
-        return true;
+        return (true, string.Empty);
     }
 
     public async Task<CartViewModel> GetCart(string? userId)
     {
         Guard.AgainstNullOrWhiteSpaceString(userId, nameof(userId));
 
-        return (await repo.All<Cart>()
+        return (await this.repo.All<Cart>()
             .Where(c => c.UserId!.ToString() == userId)
             .Select(c => new CartViewModel
             {
@@ -130,7 +131,7 @@ public class StoreService : IStoreService
             }).SingleOrDefaultAsync())!;
     }
 
-    public async Task<bool> PlaceOrder(PlaceOrderModel orderModel)
+    public async Task<(bool, string)> PlaceOrder(PlaceOrderModel orderModel)
     {
         try
         {
@@ -148,22 +149,22 @@ public class StoreService : IStoreService
                     }).ToList()
             };
 
-            await repo.AddAsync(order);
-            await repo.SaveChangesAsync();
+            await this.repo.AddAsync(order);
+            await this.repo.SaveChangesAsync();
         }
         catch (Exception)
         {
-            return false;
+            return (false, UnexpectedErrorMessage);
         }
 
-        return true;
+        return (true, string.Empty);
     }
 
     public async Task<IEnumerable<OrderViewModel>> GetOrdersByUser(string userId)
     {
         Guard.AgainstNullOrWhiteSpaceString(userId, nameof(userId));
 
-        return await repo.All<Order>()
+        return await this.repo.All<Order>()
             .Where(o => o.User.Id.ToString() == userId)
             .Select(o => new OrderViewModel
             {
@@ -189,7 +190,7 @@ public class StoreService : IStoreService
     public async Task<IEnumerable<OrderViewModel>> GetAllOrdersByStatus(Status status)
     {
         Guard.AgainstNull(status, nameof(status));
-        return await repo.All<Order>()
+        return await this.repo.All<Order>()
             .Where(o => o.Status == status)
             .Select(o => new OrderViewModel
             {

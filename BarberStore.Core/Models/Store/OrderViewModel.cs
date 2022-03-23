@@ -1,4 +1,5 @@
-﻿using BarberStore.Infrastructure.Data.Enums;
+﻿
+using BarberStore.Infrastructure.Data.Enums;
 
 namespace BarberStore.Core.Models.Store;
 
