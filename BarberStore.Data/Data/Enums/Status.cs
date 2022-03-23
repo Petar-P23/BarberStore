@@ -3,6 +3,6 @@
 public enum Status
 {
     Cancelled = 0,
-    Ongoing = 1,
+    Pending = 1,
     Finished = 2
 }

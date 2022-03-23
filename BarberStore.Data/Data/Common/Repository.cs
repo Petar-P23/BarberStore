@@ -32,7 +32,7 @@ namespace BarberStore.Infrastructure.Data.Common
         /// <param name="entity">Entity to add</param>
         public async Task AddAsync<T>(T entity) where T : class
         {
-            await DbSet<T>().AddAsync(entity);
+            await this.DbSet<T>().AddAsync(entity);
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace BarberStore.Infrastructure.Data.Common
         /// <param name="entities">Enumerable list of entities</param>
         public async Task AddRangeAsync<T>(IEnumerable<T> entities) where T : class
         {
-            await DbSet<T>().AddRangeAsync(entities);
+            await this.DbSet<T>().AddRangeAsync(entities);
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace BarberStore.Infrastructure.Data.Common
         /// <returns>Queryable expression tree</returns>
         public IQueryable<T> All<T>() where T : class
         {
-            return DbSet<T>().AsQueryable();
+            return this.DbSet<T>().AsQueryable();
         }
 
         public IQueryable<T> All<T>(Expression<Func<T, bool>> search) where T : class
@@ -82,9 +82,9 @@ namespace BarberStore.Infrastructure.Data.Common
         /// <param name="id">Identificator of record to be deleted</param>
         public async Task DeleteAsync<T>(object id) where T : class
         {
-            T entity = await GetByIdAsync<T>(id);
+            T entity = await this.GetByIdAsync<T>(id);
 
-            Delete<T>(entity);
+            this.Delete<T>(entity);
         }
 
         /// <summary>
@@ -131,12 +131,12 @@ namespace BarberStore.Infrastructure.Data.Common
         /// <returns>Single record</returns>
         public async Task<T> GetByIdAsync<T>(object id) where T : class
         {
-            return await DbSet<T>().FindAsync(id);
+            return await this.DbSet<T>().FindAsync(id);
         }
 
         public async Task<T> GetByIdsAsync<T>(object[] id) where T : class
         {
-            return await DbSet<T>().FindAsync(id);
+            return await this.DbSet<T>().FindAsync(id);
         }
 
         /// <summary>
@@ -182,8 +182,8 @@ namespace BarberStore.Infrastructure.Data.Common
 
         public void DeleteRange<T>(Expression<Func<T, bool>> deleteWhereClause) where T : class
         {
-            var entities = All<T>(deleteWhereClause);
-            DeleteRange(entities);
+            var entities = this.All<T>(deleteWhereClause);
+            this.DeleteRange(entities);
         }
     }
 }

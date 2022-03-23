@@ -17,6 +17,6 @@ public class Order
     [Required]
     [MaxLength(OrderAddressMaxLength)]
     public string? Address { get; set; }
-    public Status Status { get; set; } = Status.Ongoing;
+    public Status Status { get; set; } = Status.Pending;
     public IList<OrderProduct> OrderProducts { get; set; } = new List<OrderProduct>();
 }
