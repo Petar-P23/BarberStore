@@ -9,13 +9,12 @@ using static BarberStore.Core.Constants.ExceptionMessageConstants;
 
 namespace BarberStore.Core.Services;
 
-public class AppointmentService : IAppointmentService
+public class AppointmentService : DataService, IAppointmentService
 {
-    private readonly IApplicationDbRepository repo;
-
     public AppointmentService(IApplicationDbRepository repo)
+        : base(repo)
     {
-        this.repo = repo;
+
     }
     public async Task<(bool, string)> CreateAppointment(AppointmentModel model)
     {

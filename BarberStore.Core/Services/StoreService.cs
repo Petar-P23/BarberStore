@@ -6,19 +6,17 @@ using BarberStore.Infrastructure.Data.Models;
 using BarberStore.Infrastructure.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using BarberStore.Infrastructure.Data.Common;
 using static BarberStore.Core.Constants.ExceptionMessageConstants;
 
 namespace BarberStore.Core.Services;
 
-public class StoreService : IStoreService
+public class StoreService : DataService, IStoreService
 {
-    private readonly IApplicationDbRepository repo;
-
     public StoreService(IApplicationDbRepository repo)
+         : base(repo)
     {
-        this.repo = repo;
     }
-
     public async Task<StorePageViewModel> GetStorePage(int page, int size, string category = "")
     {
         return await this.GetStorePage(page, size, p => p.Price, category);
@@ -112,7 +110,7 @@ public class StoreService : IStoreService
     {
         Guard.AgainstNullOrWhiteSpaceString(userId, nameof(userId));
 
-        return (await this.repo.All<Cart>()
+        var cart = await this.repo.All<Cart>()
             .Where(c => c.UserId!.ToString() == userId)
             .Select(c => new CartViewModel
             {
@@ -128,7 +126,21 @@ public class StoreService : IStoreService
                         ImagePath = cp.Product.ImagePath
                     })
                     .ToList()
-            }).SingleOrDefaultAsync())!;
+            }).SingleOrDefaultAsync();
+
+        if (cart != null) return cart;
+
+        var cartId = Guid.NewGuid();
+        var newCart = new Cart
+        {
+            Id = cartId,
+            UserId = userId
+        };
+        await this.repo.AddAsync(newCart);
+        await this.repo.SaveChangesAsync();
+
+        return new CartViewModel() { Id = cartId.ToString(), Products = new List<CartProductViewModel>() };
+
     }
 
     public async Task<(bool, string)> PlaceOrder(PlaceOrderModel orderModel)
