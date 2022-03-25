@@ -6,7 +6,6 @@ using BarberStore.Infrastructure.Data.Models;
 using BarberStore.Infrastructure.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using BarberStore.Infrastructure.Data.Common;
 using static BarberStore.Core.Constants.ExceptionMessageConstants;
 
 namespace BarberStore.Core.Services;

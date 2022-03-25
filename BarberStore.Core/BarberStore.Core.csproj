@@ -11,9 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Contracts\" />
     <Folder Include="Constants\" />
     <Folder Include="Common\" />
+    <Folder Include="Models\Articles\" />
   </ItemGroup>
 
 </Project>
