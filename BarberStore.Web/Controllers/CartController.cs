@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using BarberStore.Core.Contracts;
+﻿using BarberStore.Core.Contracts;
 using BarberStore.Infrastructure.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
