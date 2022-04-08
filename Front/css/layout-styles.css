@@ -1,0 +1,110 @@
+:root {
+    --light-brown: #bcab9f;
+    --rose-gold: #e6bdc4;
+}
+
+main {
+    background-color: #e2d1c5;
+}
+
+.content {
+    width: 70vw;
+    height: 89vh;
+    margin: auto;
+    background-color: white;
+    box-shadow: 0px 3px 15px -3px rgba(0, 0, 0, 0.57);
+}
+
+nav {
+    position: sticky;
+    top: 0;
+    background-color: var(--rose-gold);
+    box-shadow: 0px 3px 15px -3px rgba(0, 0, 0, 0.57);
+    padding: 0px 40px;
+    display: flex;
+    justify-content: space-between;
+}
+
+nav ul {
+    list-style-type: none;
+    display: inline-block;
+}
+
+nav ul.right {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+nav li {
+    display: inline;
+}
+
+nav a {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 12px 16px;
+    text-decoration: none;
+    transition-duration: 0.7s;
+}
+
+nav a:hover {
+    background-color: var(--light-brown);
+    transition-duration: 0.7s;
+    box-shadow: 0px -2px 15px -3px rgba(0, 0, 0, 0.57);
+}
+
+nav a.selected {
+    background-color: var(--light-brown);
+    box-shadow: 0px -2px 15px -3px rgba(0, 0, 0, 0.57);
+}
+
+footer {
+    height: 50px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: medium;
+    background-color: var(--rose-gold);
+    color: white;
+}
+
+nav .icon {
+    display: none;
+}
+
+@media only screen and (max-width:1000px) {
+    nav,
+    main {
+        font-size: 0.9em;
+    }
+}
+
+@media only screen and (max-width: 858px) {
+    nav {
+        display: block;
+        font-size: 0.8em;
+        padding: 0;
+    }
+    main {
+        font-size: 0.8em;
+    }
+    nav a:not(.selected) {
+        display: none;
+    }
+    nav a.icon {
+        display: inline-block;
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+    nav ul.dropdown,
+    ul.dropdown a:not(.selected) {
+        display: block;
+    }
+    .content {
+        width: 100%;
+    }
+}

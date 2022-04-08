@@ -1,4 +1,5 @@
-﻿using BarberStore.Core.Contracts;
+﻿using BarberStore.Core.Common;
+using BarberStore.Core.Contracts;
 using BarberStore.Core.Models.Articles;
 using BarberStore.Infrastructure.Data.Models;
 using BarberStore.Infrastructure.Data.Repositories;
@@ -18,7 +19,8 @@ public class ArticleService : DataService, IArticleService
     {
         try
         {
-            var articleEntity = new Infrastructure.Data.Models.Article
+            Guard.AgainstNull(article);
+            var articleEntity = new Article
             {
                 Title = article.Title,
                 MainText = article.MainText,
@@ -39,7 +41,7 @@ public class ArticleService : DataService, IArticleService
     }
     public IQueryable<ArticleViewModel> GetAllArticlesAsQueryable()
     {
-        return this.repo.All<Infrastructure.Data.Models.Article>()
+        return this.repo.All<Article>()
             .Select(a => new ArticleViewModel
             {
                 Id = a.Id.ToString(),

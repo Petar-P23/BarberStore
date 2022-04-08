@@ -1,8 +1,10 @@
-﻿using BarberStore.Core.Contracts;
+﻿using BarberStore.Core.Common;
+using BarberStore.Core.Contracts;
 using BarberStore.Core.Models.Announcements;
 using BarberStore.Infrastructure.Data.Models;
 using BarberStore.Infrastructure.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
+using static BarberStore.Core.Constants.ExceptionMessageConstants;
 
 namespace BarberStore.Core.Services;
 
@@ -13,16 +15,17 @@ public class AnnouncementService : DataService, IAnnouncementService
     {
     }
 
-    public async Task<(bool, string)> CreateAnnouncement(string userId, AnnouncementModel? Announcement)
+    public async Task<(bool, string)> CreateAnnouncement(string userId, AnnouncementModel? announcement)
     {
         try
         {
+            Guard.AgainstNull(announcement);
             var announcementEntity = new Announcement
             {
-                Title = Announcement.Title,
-                MainText = Announcement.MainText,
-                ImagePath = Announcement.ImagePath,
-                PublishDate = Announcement.PublishDate.Value,
+                Title = announcement.Title,
+                MainText = announcement.MainText,
+                ImagePath = announcement.ImagePath,
+                PublishDate = announcement.PublishDate.Value,
                 PublishUserId = userId
             };
 
