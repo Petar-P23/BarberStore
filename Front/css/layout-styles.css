@@ -4,11 +4,21 @@
     --light-rose-gold: #ffdada;
 }
 
+body{
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+}
+
 main {
     background-color: #e2d1c5;
+    flex: 1 1 auto;
+    display: flex;
+    flex-flow: column;
 }
 
 .content {
+    flex: 1 1 auto;
     width: 90vw;
     margin: auto;
     background-color: white;

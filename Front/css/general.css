@@ -3,9 +3,14 @@
     padding: 0;
 }
 
+html{
+    height: 100%;
+    margin: 0;
+}
+
 body {
     height: 100%;
     font-size: 18pt;
     /*font-family: Verdana, Geneva, Tahoma, sans-serif;*/
-    font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif;
+    font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif !important;
 }
