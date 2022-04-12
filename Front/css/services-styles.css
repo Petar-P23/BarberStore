@@ -1,0 +1,24 @@
+header {
+    display: flex;
+    padding: 50px 0px;
+    background-color: #f7dfcc;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.services{
+    padding: 50px;
+}
+
+.service{
+    margin-bottom: 25px;
+}
+
+.service h3{
+    color: #685C57;
+}
+
+.service p{
+    color: #8A7063;
+}

@@ -1,0 +1,86 @@
+main {
+    height: 100%;
+    background-color: var(--light-rose-gold);
+}
+
+a {
+    text-decoration: none;
+    user-select: none;
+    color: black;
+}
+
+a.back {
+    position: absolute;
+    top: 30px;
+    left: 50px;
+    padding: 15px;
+    padding-top: 10px;
+    border-radius: 30px;
+    background-color: var(--light-brown);
+    box-shadow: 0px 3px 15px -3px rgba(0, 0, 0, 0.57);
+    color:white;
+}
+
+a.back:hover{
+    background-color: rosybrown;
+    transition: 1s;
+}
+
+.container {
+    position: relative;
+    top: 100px;
+    margin: 0px 100px;
+    height: 80%;
+    border-radius: 30px;
+    box-shadow: 0px 3px 15px -3px rgba(0, 0, 0, 0.57);
+}
+
+nav {
+    width: 20vw;
+    float: left;
+    height: 100%;
+    background-color: rgb(255, 246, 234);
+    border-bottom-left-radius: 30px;
+    border-top-left-radius: 30px;
+    border-right: 2px dotted black;
+}
+
+nav ul {
+    list-style-type: none;
+}
+
+nav ul a:first-child li{
+    border-top-left-radius: 30px;
+}
+
+nav li{
+    text-align: center;
+    padding: 20px 0px;
+    border-bottom: 2px solid rgb(238, 227, 227);
+}
+
+nav li.selected {
+    background-color: aliceblue;
+    cursor:default;
+}
+
+nav li:not(.selected):hover{
+    background-color: rgb(199, 122, 122);
+    color:white;
+    transition: 0.3s;
+}
+
+.content-container {
+    background-color: rgb(255, 240, 221);
+    height: 100%;
+    border-radius: 30px;
+}
+
+.content{
+    height: 90%;
+    padding: 20px 0;
+    margin-right: 5vw;
+    padding-left: 0px;
+    margin-left: 25vw;
+    overflow-y:auto;
+}

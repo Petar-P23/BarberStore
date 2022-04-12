@@ -1,9 +1,3 @@
-:root {
-    --light-brown: #bcab9f;
-    --rose-gold: #e6bdc4;
-    --light-rose-gold: #ffdada;
-}
-
 body{
     display: flex;
     flex-flow: column;

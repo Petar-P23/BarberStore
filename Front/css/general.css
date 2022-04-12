@@ -3,6 +3,12 @@
     padding: 0;
 }
 
+:root {
+    --light-brown: #bcab9f;
+    --rose-gold: #e6bdc4;
+    --light-rose-gold: #ffdada;
+}
+
 html{
     height: 100%;
     margin: 0;
