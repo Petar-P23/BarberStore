@@ -5,11 +5,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddApplicationDbContexts(builder.Configuration);
 builder.Services.AddApplicationIdentity();
 builder.Services.AddRazorPages();
-
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddApplicationServices(builder.Configuration);
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -37,9 +35,13 @@ app.MapControllerRoute(
     name: "areas",
     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
 );
+
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Welcome}/{id?}");
+app.MapControllerRoute(
+    name: "default",
+    pattern: "Home/{action=Index}/{id?}");
 app.MapRazorPages();
 
 app.Run();

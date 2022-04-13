@@ -13,10 +13,9 @@ namespace BarberStore.Web.Controllers
             this._logger = logger;
         }
 
-        [Route("/")]
         public IActionResult Welcome()
         {
-            return this.Ok();
+            return this.View();
         }
 
         public IActionResult Index()
@@ -24,7 +23,11 @@ namespace BarberStore.Web.Controllers
             return this.View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult AboutUs()
+        {
+            return this.View();
+        }
+        public IActionResult Services()
         {
             return this.View();
         }

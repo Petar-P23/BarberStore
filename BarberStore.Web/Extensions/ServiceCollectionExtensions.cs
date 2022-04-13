@@ -4,6 +4,9 @@ using BarberStore.Infrastructure.Data;
 using BarberStore.Infrastructure.Data.Models;
 using BarberStore.Infrastructure.Data.Repositories;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
 
 namespace BarberStore.Web.Extensions
@@ -16,7 +19,14 @@ namespace BarberStore.Web.Extensions
                 .AddScoped<IApplicationDbRepository, ApplicationDbRepository>()
                 .AddScoped<IStoreService, StoreService>()
                 .AddScoped<IAppointmentService, AppointmentService>()
-                .AddScoped<IArticleService, ArticleService>();
+                .AddScoped<IArticleService, ArticleService>()
+                .AddSingleton<IActionContextAccessor, ActionContextAccessor>()
+                .AddScoped<IUrlHelper>(x =>
+                    {
+                        var actionContext = x.GetRequiredService<IActionContextAccessor>().ActionContext;
+                        var factory = x.GetRequiredService<IUrlHelperFactory>();
+                        return factory.GetUrlHelper(actionContext);
+                    });
 
             services.AddAuthentication()
                 .AddFacebook(options =>

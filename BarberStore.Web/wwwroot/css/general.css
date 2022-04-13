@@ -1,0 +1,26 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --light-brown: #bcab9f;
+    --rose-gold: #e6bdc4;
+    --light-rose-gold: #ffdada;
+}
+
+html{
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    height: 100%;
+    font-size: 18pt;
+    /*font-family: Verdana, Geneva, Tahoma, sans-serif;*/
+    font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif !important;
+}
+
+a {
+    user-select: none;
+}

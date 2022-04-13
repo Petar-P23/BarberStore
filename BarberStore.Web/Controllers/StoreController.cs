@@ -26,7 +26,7 @@ namespace BarberStore.Web.Controllers
             if (size == 0) size = DefaultPageSize;
             if (page == 0) page = DefaultPage;
 
-            var products = await this.storeService.GetStorePage(page, size, category);
+            var products = await this.storeService.GetStorePage(page - 1, size, category);
             return this.View(products);
         }
         public async Task<IActionResult> Product(string id, string? errors)
@@ -74,7 +74,7 @@ namespace BarberStore.Web.Controllers
                 return this.View();
             }
 
-            return this.View("SuccessfulOrder");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

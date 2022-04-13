@@ -1,0 +1,38 @@
+﻿@model BarberStore.Core.Models.Store.StorePageViewModel
+@{
+    ViewData["Title"] = "Explore";
+    int counter = 4;
+}
+<header>
+    <div>
+        <h1>Store</h1><br/>
+        <p>Page @Model.PageNumber of @(Model.PagesCount==0?1:@Model.PagesCount)</p>
+    </div>
+</header>
+<div class="products">
+    @foreach (var product in @Model?.Products)
+    {
+        @if (counter == 4)
+        {
+            @Html.Raw("<div class=\"row\">")
+        }
+        <div class="product">
+            <a asp-controller="Store" asp-action="Product" asp-route-id="@product.Id">
+                <img src="~/img/@product.Image">
+                <p>@product.Name</p>
+            </a>
+            <p>@product.Price lv.</p>
+            <a class="buy-button" asp-controller="Store" asp-action="Product" asp-route-id="@product.Id">Buy</a>
+        </div>
+        @if (counter == 4)
+        {
+            @Html.Raw("</div>")
+            counter = 0;
+        }
+        counter++;
+    }
+</div>
+@section Css
+{
+<link rel="stylesheet" href="~/css/store-styles.css">
+}

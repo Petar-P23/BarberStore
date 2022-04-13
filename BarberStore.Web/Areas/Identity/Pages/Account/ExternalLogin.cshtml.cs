@@ -80,6 +80,16 @@ namespace BarberStore.Web.Areas.Identity.Pages.Account
             [Required]
             [EmailAddress]
             public string Email { get; set; }
+
+            [Required]
+            [Display(Name = "First Name")]
+            [RegularExpression(@"[A-Z][a-z]+")]
+            public string FirstName { get; set; }
+
+            [Required]
+            [Display(Name = "Last Name")]
+            [RegularExpression(@"[A-Z][a-z]+")]
+            public string LastName { get; set; }
         }
 
         public IActionResult OnGet() => this.RedirectToPage("./Login");
@@ -151,6 +161,8 @@ namespace BarberStore.Web.Areas.Identity.Pages.Account
 
                 await this._userStore.SetUserNameAsync(user, this.Input.Email, CancellationToken.None);
                 await this._emailStore.SetEmailAsync(user, this.Input.Email, CancellationToken.None);
+                user.FirstName = this.Input.FirstName;
+                user.LastName = this.Input.LastName;
 
                 var result = await this._userManager.CreateAsync(user);
                 if (result.Succeeded)

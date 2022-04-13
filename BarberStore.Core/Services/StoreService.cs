@@ -25,7 +25,7 @@ public class StoreService : DataService, IStoreService
     {
         var noFilter = string.IsNullOrWhiteSpace(category);
         var pageCount = await this.GetProductPagesCount(size, p => p.Category.Name == category || noFilter);
-        if (page > pageCount) page = 1;
+        if (page > pageCount) page = 0;
 
         Guard.AgainstNull(orderByExpression, nameof(orderByExpression));
 
@@ -38,12 +38,13 @@ public class StoreService : DataService, IStoreService
             {
                 Id = p.Id.ToString(),
                 Name = p.Name,
-                Price = p.Price
+                Price = p.Price,
+                Image = p.ImagePath
             }).ToListAsync();
 
         return new StorePageViewModel
         {
-            PageNumber = page,
+            PageNumber = page + 1,
             PagesCount = pageCount,
             Products = products
         };
@@ -69,7 +70,8 @@ public class StoreService : DataService, IStoreService
                 Id = p.Id.ToString(),
                 Name = p.Name,
                 Price = p.Price,
-                Description = p.Description
+                Description = p.Description,
+                Image = p.ImagePath
             })
             .SingleOrDefaultAsync();
 

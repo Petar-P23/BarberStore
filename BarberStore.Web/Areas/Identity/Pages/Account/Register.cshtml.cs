@@ -73,6 +73,16 @@ namespace BarberStore.Web.Areas.Identity.Pages.Account
             [Display(Name = "Email")]
             public string Email { get; set; }
 
+            [Required]
+            [Display(Name = "First Name")]
+            [RegularExpression(@"[A-Z][a-z]+")]
+            public string FirstName { get; set; }
+
+            [Required]
+            [Display(Name = "Last Name")]
+            [RegularExpression(@"[A-Z][a-z]+")]
+            public string LastName { get; set; }
+
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -110,6 +120,8 @@ namespace BarberStore.Web.Areas.Identity.Pages.Account
 
                 await this._userStore.SetUserNameAsync(user, this.Input.Email, CancellationToken.None);
                 await this._emailStore.SetEmailAsync(user, this.Input.Email, CancellationToken.None);
+                user.FirstName = this.Input.FirstName;
+                user.LastName = this.Input.LastName;
                 var result = await this._userManager.CreateAsync(user, this.Input.Password);
 
                 if (result.Succeeded)

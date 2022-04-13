@@ -1,0 +1,23 @@
+﻿@model BarberStore.Core.Models.Store.ProductPageViewModel
+@{
+    ViewData["Title"] = Model.Name;
+}
+<img src="~/img/@Model.Image" alt="">
+<div class="info">
+    <div>
+        <h1>@Model.Name</h1>
+        <p class="price">@Model.Price lv.</p>
+        <form method="post">
+            <input name="quantity" class="quantity" type="number" value="1">
+            <input name="productId" type="hidden" value="@Model.Id">
+            <input asp-controller="Store" asp-action="AddProductToCart" class="button" type="submit" value="Add to cart">
+        </form>
+    </div>
+    <h3>Description</h3>
+    <p>@Model.Description</p>
+</div>
+<div style="position: relative; bottom: 0;"></div>
+@section Css
+{    
+    <link rel="stylesheet" href="~/css/p-page-styles.css">
+}
