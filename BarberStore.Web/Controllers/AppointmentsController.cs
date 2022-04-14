@@ -1,11 +1,13 @@
 ﻿using BarberStore.Core.Contracts;
 using BarberStore.Core.Models.Appointments;
 using BarberStore.Infrastructure.Data.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BarberStore.Web.Controllers
 {
+    [Authorize]
     public class AppointmentsController : Controller
     {
         private readonly IAppointmentService appointmentService;
@@ -17,33 +19,65 @@ namespace BarberStore.Web.Controllers
             this.appointmentService = appointmentService;
             this.userManager = userManager;
         }
-
-        public async Task<IActionResult> Calendar(int month)
+        [HttpGet]
+        public async Task<IActionResult> BookAppointment()
         {
-            IEnumerable<CalendarAppointmentViewModel> appointments;
-            IEnumerable<UserAppointmentViewModel> userAppointments;
-            try
-            {
-                appointments = await this.appointmentService.GetAllAppointmentsByMonth(month);
-                var user = this.userManager.GetUserId(this.User);
+            var userId = this.userManager.GetUserId(User);
+            var userAppointments =
+                await this.appointmentService.GetUserAppointments(userId);
 
-                userAppointments = await this.appointmentService.GetUserAppointments(user);
-            }
-            catch (Exception)
+            return View(new AppointmentsPageViewModel
             {
-                return this.BadRequest();
+                Previous = null,
+                Next = null,
+                Current = null,
+                UserAppointmentViewModels = userAppointments
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> BookAppointment(DateTime date, string time)
+        {
+            var timeParts = time.Split(":").Select(int.Parse).ToArray();
+            date = new DateTime(date.Year, date.Month, date.Day, timeParts[0], timeParts[1], 0);
+
+            var userId = this.userManager.GetUserId(User);
+            var userAppointments =
+                await this.appointmentService.GetUserAppointments(userId);
+
+            if (await this.appointmentService.CheckIfAppointmentExists(date))
+            {
+                var previous =
+                    await this.appointmentService.GetPreviousFreeAppointment(date, 9, 18);
+                var next =
+                    await this.appointmentService.GetNextFreeAppointment(date, 9, 18);
+
+                return View(new AppointmentsPageViewModel
+                {
+                    Previous = previous,
+                    Next = next,
+                    Current = null,
+                    UserAppointmentViewModels = userAppointments
+                });
             }
 
             var pageModel = new AppointmentsPageViewModel
             {
-                CalendarViewModels = appointments,
+                Previous = null,
+                Next = null,
+                Current = new CalendarAppointmentViewModel() { Start = date },
                 UserAppointmentViewModels = userAppointments
             };
 
-            return this.View(pageModel);
+            if (date < DateTime.Now)
+            {
+                pageModel.Next = await this.appointmentService.GetNextFreeAppointment(DateTime.Now, 9, 18);
+                pageModel.Current = null;
+            }
+            return View(pageModel);
         }
-
-        public async Task<IActionResult> Cancel(string id)
+        [HttpGet]
+        public async Task<IActionResult> Cancel(string id, string returnUrl)
         {
             var user = this.userManager.GetUserId(this.User);
 
@@ -53,19 +87,22 @@ namespace BarberStore.Web.Controllers
                 return this.BadRequest(error);
             }
 
-            var month = DateTime.Now.Month;
-            return this.RedirectToAction("Calendar", month);
-        }
+            if (returnUrl != null)
+                return Redirect(returnUrl);
 
-        public async Task<IActionResult> Create(string[] serviceIds, DateTime appointmentTime)
+            return this.RedirectToAction("BookAppointment");
+        }
+        [HttpPost]
+        public async Task<IActionResult> Create(DateTime date, string time)
         {
             var user = this.userManager.GetUserId(this.User);
+            var timeParts = time.Split(":").Select(int.Parse).ToArray();
+            var appointmentTime = new DateTime(date.Year, date.Month, date.Day, timeParts[0], timeParts[1], 0);
 
             var appointment = new AppointmentModel
             {
                 Start = appointmentTime,
                 UserId = user,
-                Services = serviceIds
             };
 
             var (success, error) = await this.appointmentService.CreateAppointment(appointment);
@@ -74,29 +111,28 @@ namespace BarberStore.Web.Controllers
                 return this.BadRequest(error);
             }
 
-            var month = DateTime.Now.Month;
-            return this.RedirectToAction("Calendar", month);
+            return this.RedirectToAction("BookAppointment");
         }
 
-        public async Task<IActionResult> Edit(string id, string[] serviceIds, DateTime appointmentTime)
-        {
-            var user = this.userManager.GetUserId(this.User);
+        //public async Task<IActionResult> Edit(string id, string[] serviceIds, DateTime appointmentTime)
+        //{
+        //    var user = this.userManager.GetUserId(this.User);
 
-            var appointment = new AppointmentModel
-            {
-                Start = appointmentTime,
-                UserId = user,
-                Services = serviceIds
-            };
+        //    var appointment = new AppointmentModel
+        //    {
+        //        Start = appointmentTime,
+        //        UserId = user,
+        //        Services = serviceIds
+        //    };
 
-            var (success, error) = await this.appointmentService.EditAppointment(user, id, appointment);
-            if (!success)
-            {
-                return this.BadRequest(error);
-            }
+        //    var (success, error) = await this.appointmentService.EditAppointment(user, id, appointment);
+        //    if (!success)
+        //    {
+        //        return this.BadRequest(error);
+        //    }
 
-            var month = DateTime.Now.Month;
-            return this.RedirectToAction("Calendar", month);
-        }
+        //    var month = DateTime.Now.Month;
+        //    return this.RedirectToAction("BookAppointment");
+        //}
     }
 }

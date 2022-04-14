@@ -18,8 +18,9 @@ namespace BarberStore.Web.Extensions
             services
                 .AddScoped<IApplicationDbRepository, ApplicationDbRepository>()
                 .AddScoped<IStoreService, StoreService>()
+                .AddScoped<IAnnouncementService, AnnouncementService>()
                 .AddScoped<IAppointmentService, AppointmentService>()
-                .AddScoped<IArticleService, ArticleService>()
+                .AddScoped<IServicesService, ServicesService>()
                 .AddSingleton<IActionContextAccessor, ActionContextAccessor>()
                 .AddScoped<IUrlHelper>(x =>
                     {

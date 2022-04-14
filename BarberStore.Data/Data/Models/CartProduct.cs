@@ -6,6 +6,8 @@ namespace BarberStore.Infrastructure.Data.Models;
 
 public class CartProduct
 {
+    [Key]
+    public Guid Id { get; set; } = Guid.NewGuid();
     public Cart Cart { get; set; }
     [ForeignKey(nameof(Cart))]
     public Guid CartId { get; set; }

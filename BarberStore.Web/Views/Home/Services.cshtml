@@ -1,14 +1,18 @@
-﻿@{
+﻿@model IEnumerable<BarberStore.Core.Models.Appointments.ServiceModel>
+@{
     ViewData["Title"] = "Services";
 }
 <header>
     <h1>Services and Prices</h1>
 </header>
 <div class="services">
-    <div class="service">
-        <h3>Haircuts</h3>
-        <p>Long hair - 30lv<br>Short hair - 20lv.</p>
-    </div>
+    @foreach (var service in Model)
+    {
+        <div class="service">
+            <h3>@service.Name - @service.Price</h3>
+            <p>@service.Description</p>
+        </div>
+    }
 </div>
 @section Css
 {

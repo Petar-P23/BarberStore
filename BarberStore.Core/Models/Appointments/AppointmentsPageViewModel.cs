@@ -2,6 +2,8 @@
 
 public class AppointmentsPageViewModel
 {
-    public IEnumerable<CalendarAppointmentViewModel> CalendarViewModels { get; set; }
+    public CalendarAppointmentViewModel Previous { get; set; }
+    public CalendarAppointmentViewModel Next { get; set; }
+    public CalendarAppointmentViewModel Current { get; set; }
     public IEnumerable<UserAppointmentViewModel> UserAppointmentViewModels { get; set; }
 }

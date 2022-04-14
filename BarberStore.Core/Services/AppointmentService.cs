@@ -5,6 +5,7 @@ using BarberStore.Infrastructure.Data.Enums;
 using BarberStore.Infrastructure.Data.Models;
 using BarberStore.Infrastructure.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using static BarberStore.Core.Constants.ExceptionMessageConstants;
 
 namespace BarberStore.Core.Services;
@@ -25,16 +26,12 @@ public class AppointmentService : DataService, IAppointmentService
             {
                 throw new ArgumentException(AppointmentInvalidDateException);
             }
-            var services = await this.repo
-                .All<Service>()
-                .Where(s => model.Services.Contains(s.Id.ToString()))
-                .ToListAsync();
 
             var appointment = new Appointment
             {
                 Start = model.Start,
                 UserId = model.UserId,
-                ServicesToDo = services
+                Status = Status.Pending
             };
 
             await this.repo.AddAsync(appointment);
@@ -51,43 +48,7 @@ public class AppointmentService : DataService, IAppointmentService
 
         return (true, string.Empty);
     }
-    public async Task<(bool, string)> EditAppointment(string userId, string appointmentId, AppointmentModel model)
-    {
-        try
-        {
-            Guard.AgainstNull(model);
-            if (model.Start.Day < DateTime.Today.Day)
-            {
-                throw new ArgumentException(AppointmentInvalidDateException);
-            }
 
-            var services = await this.repo
-                .All<Service>()
-                .Where(s => model.Services.Contains(s.Id.ToString()))
-                .ToListAsync();
-
-            var appointment = await this.repo
-                .All<Appointment>()
-                .Where(a => a.UserId == userId && a.Id.ToString() == appointmentId)
-                .SingleOrDefaultAsync();
-            Guard.AgainstNull(appointment);
-
-            appointment.Start = model.Start;
-            appointment.ServicesToDo = services;
-
-            await this.repo.SaveChangesAsync();
-        }
-        catch (ArgumentException ex)
-        {
-            return (false, ex.Message);
-        }
-        catch (Exception)
-        {
-            return (false, UnexpectedErrorMessage);
-        }
-
-        return (true, string.Empty);
-    }
     public async Task<(bool, string)> ChangeAppointmentStatus(string userId, string appointmentId, Status status)
     {
         try
@@ -115,25 +76,7 @@ public class AppointmentService : DataService, IAppointmentService
     }
     public async Task<(bool, string)> CancelAppointment(string userId, string appointmentId)
     {
-        try
-        {
-            Guard.AgainstNullOrWhiteSpaceString(userId);
-            Guard.AgainstNullOrWhiteSpaceString(appointmentId);
-
-            var appointment = await this.repo.All<Appointment>()
-                .Where(a => a.Id.ToString() == appointmentId && a.UserId == userId)
-                .SingleOrDefaultAsync();
-            Guard.AgainstNull(appointment);
-
-            appointment.Status = Status.Cancelled;
-            await this.repo.SaveChangesAsync();
-        }
-        catch (Exception)
-        {
-            return (false, UnexpectedErrorMessage);
-        }
-
-        return (true, string.Empty);
+        return await ChangeAppointmentStatus(userId, appointmentId, Status.Cancelled);
     }
     public async Task<IEnumerable<CalendarAppointmentViewModel>> GetAllAppointmentsByMonth(int month)
     {
@@ -153,15 +96,13 @@ public class AppointmentService : DataService, IAppointmentService
             .Where(a => a.UserId == userId)
             .Select(a => new UserAppointmentViewModel
             {
+                Id = a.Id.ToString(),
                 Start = a.Start,
                 UserId = a.UserId,
-                Services = a.ServicesToDo.Select(s => new ServiceModel
-                {
-                    Name = s.Name,
-                    Price = s.Price,
-                }).ToList(),
                 Status = a.Status
             })
+            .OrderByDescending(a => a.Status)
+            .ThenByDescending(a => a.Start)
             .ToListAsync();
 
         return appointments;
@@ -174,17 +115,67 @@ public class AppointmentService : DataService, IAppointmentService
             {
                 Start = a.Start,
                 UserId = a.UserId,
-                Services = a.ServicesToDo.Select(s => new ServiceModel
-                {
-                    Id = s.Id.ToString(),
-                    Name = s.Name,
-                    Price = s.Price,
-                }).ToList(),
                 Status = a.Status
             })
-            .OrderBy(a => a.Start)
+            .OrderByDescending(a => a.Start)
+            .ThenByDescending(a => a.Start)
             .ToListAsync();
 
         return appointments;
+    }
+
+    public async Task<CalendarAppointmentViewModel> GetPreviousFreeAppointment(DateTime date, int workStart, int workEnd)
+    {
+
+        while (await CheckIfAppointmentExists(date))
+        {
+            date = date.AddMinutes(-30);
+            if (date.Hour >= workStart) continue;
+            date = date.AddDays(-1);
+            date = date.AddHours(9);
+        }
+
+        if (date < DateTime.Now) return null;
+        return new CalendarAppointmentViewModel { Start = date };
+    }
+    public async Task<CalendarAppointmentViewModel> GetNextFreeAppointment(DateTime date, int workStart, int workEnd)
+    {
+        if (date.Minute is not (30 or 0) || date < DateTime.Now)
+        {
+            var now = DateTime.Now;
+            date = new DateTime(now.Year, now.Month, now.Day, now.Hour, 30,0);
+            if (date < now)
+            {
+                date = date.AddMinutes(30);
+            }
+
+            if (date.Hour >= workEnd)
+            {
+                date = date.AddDays(1);
+                date = date.AddHours((date.Hour - workStart) * -1);
+            }
+        }
+
+        while (await CheckIfAppointmentExists(date))
+        {
+            date = date.AddMinutes(30);
+            if (date.Hour < workEnd) continue;
+            date = date.AddDays(1);
+            date = date.AddHours((date.Hour - workStart) * -1);
+        }
+
+        return new CalendarAppointmentViewModel { Start = date };
+    }
+
+    public async Task<bool> CheckIfAppointmentExists(DateTime date)
+    {
+        var test = await this.repo.All<Appointment>()
+            .Where(a => a.Status != Status.Cancelled)
+            .ToListAsync();
+        test = test.Where(a => a.Start == date).ToList();
+        var exists = await this.repo.All<Appointment>()
+            .Where(a => a.Start == date && a.Status != Status.Cancelled)
+            .FirstOrDefaultAsync() != null;
+        return exists;
     }
 }

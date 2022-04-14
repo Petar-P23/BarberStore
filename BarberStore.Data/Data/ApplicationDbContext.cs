@@ -13,9 +13,6 @@ namespace BarberStore.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<OrderProduct>().HasKey(e => new { e.OrderId, e.ProductId });
-            builder.Entity<CartProduct>().HasKey(e => new { e.CartId, e.ProductId });
-
             builder.Entity<ApplicationUser>()
                 .HasOne(e => e.Cart)
                 .WithOne(e => e.User)

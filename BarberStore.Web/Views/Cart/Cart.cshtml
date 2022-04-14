@@ -1,0 +1,44 @@
+﻿@model BarberStore.Core.Models.Store.CartViewModel
+@{
+    ViewData["Title"] = "Cart";
+}
+<h1>Cart</h1>
+<form asp-controller="Store" asp-action="PlaceOrder" class="order" method="post">
+    <ul class="products">
+        <li>
+            <div>
+                <p>Product name</p>
+                <p class="quantity">Quantity</p>
+            </div>
+            <p>Price</p>
+        </li>
+        @for (int i = 0; i<Model.Products.Count;i++)
+        {
+            var product = Model.Products[i];
+
+            <li>
+                <div>
+                    <p id="productName">@product.Name</p>
+                    <p class="quantity">@product.Quantity</p>
+                    <input type="hidden" asp-for="Products[i].Quantity" value="@product.Quantity">
+                    <input type="hidden" asp-for="Products[i].Id" value="@product.Id">
+                </div>
+                <p>@(product.Price*product.Quantity) lv.</p>
+            </li>
+        }
+    </ul>
+    <div class="right-panel">
+        <p>Total price: @Model.Products.Sum(p=>p.Price*p.Quantity).ToString("F2")</p>
+        @if (@Model.Products.Count != 0)
+        {
+            <input class="order-button" type="submit" value="Place Order">
+        }
+        else
+        {
+            <p>Cart is empty.</p>
+        }
+    </div>
+</form>
+@section Css{
+<link rel="stylesheet" href="~/css/cart.css">
+}

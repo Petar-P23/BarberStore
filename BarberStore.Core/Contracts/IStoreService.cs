@@ -47,13 +47,13 @@ public interface IStoreService
     /// </summary>
     /// <param name="orderModel">The order's information.</param>
     /// <returns>Returns true if adding was successful. Returns false and a string with an error message if it was unsuccessful.</returns>
-    public Task<(bool, string)> PlaceOrder(PlaceOrderModel orderModel);
+    public Task<(bool, string)> PlaceOrder(PlaceOrderProductModel[]? products, string userId);
     /// <summary>
     /// Used to get all of a given user's orders.
     /// </summary>
     /// <param name="userId"></param>
     /// <returns>Returns a collection of order view models.</returns>
-    public Task<IEnumerable<OrderViewModel>> GetOrdersByUser(string userId);
+    public Task<IEnumerable<OrderViewModel>> GetOrdersByUserAsync(string userId);
     /// <summary>
     /// Used to get all orders filtered by their status.
     /// </summary>

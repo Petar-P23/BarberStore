@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
-using System.Text.Encodings.Web;
 
 namespace BarberStore.Web.Areas.Identity.Pages.Account
 {
@@ -122,6 +121,8 @@ namespace BarberStore.Web.Areas.Identity.Pages.Account
                 await this._emailStore.SetEmailAsync(user, this.Input.Email, CancellationToken.None);
                 user.FirstName = this.Input.FirstName;
                 user.LastName = this.Input.LastName;
+                user.Cart = new Cart { UserId = user.Id };
+
                 var result = await this._userManager.CreateAsync(user, this.Input.Password);
 
                 if (result.Succeeded)
@@ -137,18 +138,18 @@ namespace BarberStore.Web.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                         protocol: this.Request.Scheme);
 
-                    await this._emailSender.SendEmailAsync(this.Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    //await this._emailSender.SendEmailAsync(this.Input.Email, "Confirm your email",
+                    //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-                    if (this._userManager.Options.SignIn.RequireConfirmedAccount)
-                    {
-                        return this.RedirectToPage("RegisterConfirmation", new { email = this.Input.Email, returnUrl = returnUrl });
-                    }
-                    else
-                    {
-                        await this._signInManager.SignInAsync(user, isPersistent: false);
-                        return this.LocalRedirect(returnUrl);
-                    }
+                    //if (this._userManager.Options.SignIn.RequireConfirmedAccount)
+                    //{
+                    //    return this.RedirectToPage("RegisterConfirmation", new { email = this.Input.Email, returnUrl = returnUrl });
+                    //}
+                    //else
+                    //{
+                    await this._signInManager.SignInAsync(user, isPersistent: false);
+                    return this.LocalRedirect(returnUrl);
+                    //}
                 }
                 foreach (var error in result.Errors)
                 {

@@ -1,4 +1,7 @@
-﻿using BarberStore.Web.Models;
+﻿using BarberStore.Core.Contracts;
+using BarberStore.Core.Models.Announcements;
+using BarberStore.Core.Models.Appointments;
+using BarberStore.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -7,10 +10,16 @@ namespace BarberStore.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IServicesService _servicesService;
+        private readonly IAnnouncementService _announcementService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger,
+            IServicesService servicesService,
+            IAnnouncementService announcementService)
         {
             this._logger = logger;
+            this._servicesService = servicesService;
+            this._announcementService = announcementService;
         }
 
         public IActionResult Welcome()
@@ -18,18 +27,15 @@ namespace BarberStore.Web.Controllers
             return this.View();
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return this.View();
+            IEnumerable<AnnouncementViewModel> announcements = await this._announcementService.GetTopAnnouncements();
+            return this.View(announcements);
         }
-
-        public IActionResult AboutUs()
+        public async Task<IActionResult> Services()
         {
-            return this.View();
-        }
-        public IActionResult Services()
-        {
-            return this.View();
+            IEnumerable<ServiceModel> services = await this._servicesService.GetServicesAsync();
+            return this.View(services);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

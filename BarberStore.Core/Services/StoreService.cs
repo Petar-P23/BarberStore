@@ -82,21 +82,28 @@ public class StoreService : DataService, IStoreService
     {
         try
         {
-            var user = await this.repo.GetByIdAsync<ApplicationUser>(userId);
+            var user = await this.repo.All<ApplicationUser>()
+                .Where(u => u.Id == userId)
+                .Include(u => u.Cart)
+                .SingleOrDefaultAsync();
+
             Guard.AgainstNull(user, nameof(user));
+            if (user.Cart == null)
+            {
+                user.Cart = new Cart { UserId = userId };
+            }
 
-            var cart = user.Cart ?? new Cart { User = user };
-
-            var product = await this.repo.GetByIdAsync<Product>(productId);
+            var product = await this.repo.GetByIdAsync<Product>(Guid.Parse(productId));
             Guard.AgainstNull(product, nameof(product));
 
-            cart.CartProducts.Add(new CartProduct
+            var cp = new CartProduct
             {
+                Cart = user.Cart,
                 Product = product,
                 Quantity = quantity
-            });
+            };
 
-            await this.repo.AddAsync(cart);
+            await this.repo.AddAsync(cp);
             await this.repo.SaveChangesAsync();
         }
         catch (Exception)
@@ -112,7 +119,7 @@ public class StoreService : DataService, IStoreService
         Guard.AgainstNullOrWhiteSpaceString(userId, nameof(userId));
 
         var cart = await this.repo.All<Cart>()
-            .Where(c => c.UserId!.ToString() == userId)
+            .Where(c => c.UserId == userId)
             .Select(c => new CartViewModel
             {
                 Id = c.Id.ToString(),
@@ -144,23 +151,43 @@ public class StoreService : DataService, IStoreService
 
     }
 
-    public async Task<(bool, string)> PlaceOrder(PlaceOrderModel orderModel)
+    public async Task<(bool, string)> PlaceOrder(PlaceOrderProductModel[]? products, string userId)
     {
         try
         {
-            Guard.AgainstNull(orderModel, nameof(orderModel));
+            Guard.AgainstNull(products, nameof(products));
+            Guard.AgainstNullOrWhiteSpaceString(userId, nameof(userId));
 
             var order = new Order
             {
-                UserId = orderModel.UserId,
-                TimeOfOrdering = DateTime.Now.Date,
-                Address = orderModel.Address,
-                OrderProducts = orderModel.ProductIds
+                UserId = userId,
+                TimeOfOrdering = DateTime.Now,
+                Address = "",
+                Status = Status.Pending,
+                OrderProducts = products
                     .Select(p => new OrderProduct
                     {
-                        ProductId = Guid.Parse(p)
+                        ProductId = Guid.Parse(p.Id),
+                        Quantity = p.Quantity
                     }).ToList()
             };
+            var cartId = await
+                this.repo.All<Cart>()
+                    .Where(c => c.UserId == userId)
+                    .Select(c => c.Id)
+                    .FirstOrDefaultAsync();
+
+            var cartProducts = await this.repo.All<CartProduct>()
+                .Where(cp => cp.CartId == cartId
+                             && products.Select(p => p.Id).Contains(cp.ProductId.ToString())
+                             && cp.Ordered == false)
+                .ToListAsync();
+
+            foreach (var product in cartProducts)
+            {
+                if (product != null)
+                    product.Ordered = true;
+            }
 
             await this.repo.AddAsync(order);
             await this.repo.SaveChangesAsync();
@@ -173,12 +200,12 @@ public class StoreService : DataService, IStoreService
         return (true, string.Empty);
     }
 
-    public async Task<IEnumerable<OrderViewModel>> GetOrdersByUser(string userId)
+    public async Task<IEnumerable<OrderViewModel>> GetOrdersByUserAsync(string userId)
     {
         Guard.AgainstNullOrWhiteSpaceString(userId, nameof(userId));
 
         return await this.repo.All<Order>()
-            .Where(o => o.User.Id.ToString() == userId)
+            .Where(o => o.User.Id == userId)
             .Select(o => new OrderViewModel
             {
                 Id = o.Id.ToString(),
@@ -192,7 +219,6 @@ public class StoreService : DataService, IStoreService
                     Name = op.Product.Name,
                     Price = op.Product.Price,
                     Quantity = op.Quantity,
-                    ImagePath = op.Product.ImagePath
                 }).ToList()
             })
             .OrderByDescending(o => o.Status)
@@ -218,7 +244,6 @@ public class StoreService : DataService, IStoreService
                     Name = op.Product.Name,
                     Price = op.Product.Price,
                     Quantity = op.Quantity,
-                    ImagePath = op.Product.ImagePath
                 }).ToList()
             })
             .OrderByDescending(o => o.OrderTime)

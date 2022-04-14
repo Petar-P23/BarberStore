@@ -10,7 +10,7 @@ namespace BarberStore.Core.Services;
 
 public class AnnouncementService : DataService, IAnnouncementService
 {
-    public AnnouncementService(IApplicationDbRepository repo) 
+    public AnnouncementService(IApplicationDbRepository repo)
         : base(repo)
     {
     }
@@ -22,11 +22,8 @@ public class AnnouncementService : DataService, IAnnouncementService
             Guard.AgainstNull(announcement);
             var announcementEntity = new Announcement
             {
-                Title = announcement.Title,
                 MainText = announcement.MainText,
-                ImagePath = announcement.ImagePath,
-                PublishDate = announcement.PublishDate.Value,
-                PublishUserId = userId
+                PublishDate = DateTime.Now,
             };
 
             await this.repo.AddAsync(announcementEntity);
@@ -45,11 +42,8 @@ public class AnnouncementService : DataService, IAnnouncementService
             .Select(a => new AnnouncementViewModel
             {
                 Id = a.Id.ToString(),
-                Title = a.Title,
                 MainText = a.MainText,
-                ImagePath = a.ImagePath,
                 PublishDate = a.PublishDate,
-                Publisher = $"{a.PublishUser.FirstName} {a.PublishUser.LastName}"
             })
             .OrderByDescending(a => a.PublishDate);
     }

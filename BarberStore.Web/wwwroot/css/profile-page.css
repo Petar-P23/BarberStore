@@ -59,16 +59,16 @@ nav li{
     border-bottom: 2px solid rgb(238, 227, 227);
 }
 
-nav li.selected {
+nav a.selected li{
     background-color: aliceblue;
     cursor:default;
 }
 
-nav li:not(.selected):hover{
-    background-color: rgb(199, 122, 122);
-    color:white;
-    transition: 0.3s;
-}
+    nav a:not(.selected) li:hover {
+        background-color: rgb(199, 122, 122);
+        color: white;
+        transition: 0.3s;
+    }
 
 .content-container {
     background-color: rgb(255, 240, 221);

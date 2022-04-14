@@ -1,0 +1,162 @@
+﻿h1 {
+    color: var(--light-brown);
+    padding: 20px;
+    padding-bottom: 10px;
+    text-align: center;
+    letter-spacing: 2px;
+}
+
+.appointments a {
+    text-decoration: none;
+    background-color: red;
+    color: white;
+    padding: 3px 20px;
+    border-radius: 3px;
+    box-shadow: 0px 1px 7px 1px rgba(0, 0, 0, 0.151);
+    transition: 0.3s;
+}
+
+.appointments a:hover {
+    transition: 0.3s;
+    box-shadow: 0px 1px 7px 5px rgba(0, 0, 0, 0.151);
+}
+
+.container {
+    height: 85%;
+}
+
+.check-appointment {
+    margin: 80px;
+    margin-top: 10px;
+    height: 40%;
+    display: flex;
+    flex-direction: row;
+    box-shadow: 0px 1px 7px 1px rgba(0, 0, 0, 0.151);
+}
+
+.appointments {
+    margin: 0px 80px;
+    height: 300px;
+    box-shadow: 2px 0px 7px 1px rgba(0, 0, 0, 0.151);
+    overflow-y: auto;
+}
+
+    .appointments li {
+        padding: 20px;
+        border-bottom: 2px solid beige;
+        justify-content: center;
+    }
+
+        .appointments li:first-child {
+            box-shadow: 0px 3px 7px 1px rgba(0, 0, 0, 0.151);
+        }
+
+        .appointments li .quantity {
+            border-left: 3px solid rgb(222, 222, 255);
+            border-right: 3px solid rgb(222, 222, 255);
+            padding: 0px 7px;
+        }
+
+        .appointments li div p {
+            width: 200px;
+            text-align: center;
+        }
+
+        .appointments li, .appointments li div {
+            display: flex;
+            flex-direction: row;
+        }
+
+            .appointments li *:not(div) {
+                margin-right: 70px;
+            }
+
+.right-panel {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    height: 100%;
+    width: 100%;
+}
+
+    .right-panel div {
+        margin: auto;
+        padding: 30px 40px;
+        padding-bottom: 0;
+        box-shadow: 0px 3px 7px 3px rgba(0, 0, 0, 0.151);
+    }
+
+        .right-panel div p {
+            padding-bottom: 10px;
+        }
+
+        .right-panel div.previous p {
+            color: rgb(252, 35, 35);
+        }
+
+        .right-panel div.next p {
+            color: rgb(23, 158, 23);
+        }
+
+.is-done {
+    color: rgb(23, 158, 23);
+}
+
+.not-done {
+    color: rgb(139, 167, 41);
+}
+
+input:not(.check-button):not(.book-appointment), select {
+    display: inline-block;
+    height: 30px;
+    padding: 0px 10px;
+    font-size: 18pt;
+}
+
+.right-panel ul {
+    list-style-type: none;
+}
+
+    .right-panel ul li {
+        margin: 20px 0px;
+    }
+
+.right-panel * {
+    text-align: center;
+}
+
+input.check-button, input.book-appointment {
+    width: 200px;
+    padding: 10px 10px;
+    color: white;
+    font-size: 20pt;
+    background-color: #d4c8be;
+    border: 2px dotted black;
+    border-radius: 2px;
+    transition-duration: 0.5s;
+}
+
+    input.check-button:hover, input.book-appointment:hover {
+        background-color: rgb(162, 211, 255);
+        border-radius: 5px;
+        transition-duration: 1s;
+        cursor: pointer;
+    }
+
+input.book-appointment {
+    font-size: 14pt;
+    margin: 0;
+}
+
+.check-available {
+    padding: 0px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    text-align: center;
+    box-shadow: 2px 0px 7px 1px rgba(0, 0, 0, 0.151);
+}
+
+.check-button {
+    margin: 0px auto;
+}

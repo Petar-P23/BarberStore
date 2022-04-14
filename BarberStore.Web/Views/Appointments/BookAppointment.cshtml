@@ -1,0 +1,102 @@
+﻿@using BarberStore.Infrastructure.Data.Enums
+@model BarberStore.Core.Models.Appointments.AppointmentsPageViewModel
+@{
+    ViewData["Title"] = "Book Appointment";
+}
+<h1>Book Appointment</h1>
+<div class="check-appointment">
+    <form class="check-available" method="post">
+        <input type="date" name="date">
+        <select name="time" list="times">
+            @for (int i = 9; i < 18; i++)
+            {
+                for (int j = 0; j < 60; j += 30)
+                {
+                    var hours = i < 10 ? $"0{i}" : i.ToString();
+                    var minutes = j == 0 ? $"00" : j.ToString();
+
+                    var time = $"{hours}:{minutes}";
+                    <option name="time" value="@time">@time</option>
+                }
+            }
+        </select>
+        <input asp-controller="Appointments" asp-action="BookAppointment" class="check-button" type="submit" value="Check">
+    </form>
+    <div class="right-panel">
+        @if (Model.Previous != null)
+        {
+            <div class="previous">
+                <p>Previous Available</p>
+                <ul>
+                    <li>Date: @Model.Previous.Start.Date.ToShortDateString()</li>
+                    <li>Time: @Model.Previous.Start.ToShortTimeString()</li>
+                    <li>
+                        <form method="post">
+                            <input type="hidden" name="date" value="@Model.Previous.Start.Date.ToShortDateString()">
+                            <input type="hidden" name="time" value="@Model.Previous.Start.ToShortTimeString()">
+                            <input asp-controller="Appointments" asp-action="Create" class="book-appointment" type="submit" value="Book appointment">
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        }
+        @if (Model.Current != null)
+        {
+            <div>
+                <p>Appointment:</p>
+                <ul>
+                    <li>Date: @Model.Current.Start.Date.ToShortDateString()</li>
+                    <li>Time: @Model.Current.Start.ToShortTimeString()</li>
+                    <li>
+                        <form method="post">
+                            <input type="hidden" name="date" value="@Model.Current.Start.Date.ToShortDateString()">
+                            <input type="hidden" name="time" value="@Model.Current.Start.ToShortTimeString()">
+                            <input asp-controller="Appointments" asp-action="Create" class="book-appointment" type="submit" value="Book appointment">
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        }
+        @if (Model.Next != null)
+        {
+            <div class="next">
+                <p>Next Available</p>
+                <ul>
+                    <li>Date: @Model.Next.Start.Date.ToShortDateString()</li>
+                    <li>Time: @Model.Next.Start.ToShortTimeString()</li>
+                    <li>
+                        <form method="post">
+                            <input type="hidden" name="date" value="@Model.Next.Start.Date.ToShortDateString()">
+                            <input type="hidden" name="time" value="@Model.Next.Start.ToShortTimeString()">
+                            <input asp-controller="Appointments" asp-action="Create" class="book-appointment" type="submit" value="Book appointment">
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        }
+    </div>
+</div>
+
+<ul class="appointments">
+    <li>
+        <p>Your appointments</p>
+    </li>
+    @foreach (var appointment in Model.UserAppointmentViewModels)
+    {
+        var classText = @appointment.Status == Status.Cancelled ? "not-done" : "is-done";
+        <li>
+            <div>
+                <p>@appointment.Start.Date.ToShortDateString()</p>
+                <p class="quantity">@appointment.Start.ToShortTimeString()</p>
+            </div>
+            <p class="@classText">@appointment.Status</p>
+            @if (appointment.Status != Status.Cancelled)
+            {
+            <a asp-controller="Appointments" asp-action="Cancel" asp-route-id="@appointment.Id">Cancel</a>
+            }
+        </li>
+    }
+</ul>
+@section Css{
+<link rel="stylesheet" href="~/css/appointments.css">
+}

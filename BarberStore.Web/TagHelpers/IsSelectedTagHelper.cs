@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace BarberStore.Web.TagHelpers
 {
-    // You may need to install the Microsoft.AspNetCore.Razor.Runtime package into your project
     [HtmlTargetElement(Attributes = "is-selected")]
     public class IsSelectedTagHelper : TagHelper
     {

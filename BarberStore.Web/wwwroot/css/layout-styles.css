@@ -34,17 +34,26 @@ nav ul {
     display: inline-block;
 }
 
-nav ul.right {
-    margin-left: auto;
-    margin-right: 0;
-}
+    nav ul.right {
+        margin-left: auto;
+        margin-right: 0;
+        display: flex;
+        flex-direction: row;
+    }
+
+    nav ul.right a, nav ul.right button {
+        display: inline-block;
+    }
 
 nav li {
     display: inline;
 }
 
-nav a {
+nav a, button {
     display: inline-block;
+    background:none;
+    border: none;
+    font-size: 18pt;
     color: white;
     text-align: center;
     padding: 12px 16px;
@@ -52,10 +61,11 @@ nav a {
     transition-duration: 0.7s;
 }
 
-nav a:hover {
-    background-color: var(--light-brown);
+nav a:hover, button:hover {
+    background-color: var(--light-brown) !important;
     transition-duration: 0.7s;
     box-shadow: 0px -2px 15px -3px rgba(0, 0, 0, 0.57);
+    cursor: pointer;
 }
 
 nav a.selected {

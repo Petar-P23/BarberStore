@@ -17,6 +17,4 @@ public class Appointment
     [Required]
     [ForeignKey(nameof(User))]
     public string? UserId { get; set; }
-
-    public IList<Service> ServicesToDo { get; set; } = new List<Service>();
 }

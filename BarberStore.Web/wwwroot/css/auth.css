@@ -93,3 +93,7 @@ form {
         display: flex;
         flex-direction: row;
     }
+
+    .validation-div ul{
+        list-style-type: none;
+    }

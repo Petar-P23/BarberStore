@@ -1,5 +1,6 @@
 ﻿using BarberStore.Core.Contracts;
 using BarberStore.Infrastructure.Data.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,34 +17,19 @@ namespace BarberStore.Web.Controllers
             this.storeService = storeService;
             this.userManager = userManager;
         }
-
-        public async Task<IActionResult> GetCart()
+        [Authorize]
+        public async Task<IActionResult> Cart()
         {
             try
             {
                 var user = this.userManager.GetUserId(this.User);
                 var cart = await this.storeService.GetCart(user);
-                return this.Ok(cart);
+                return this.View(cart);
             }
             catch (Exception)
             {
                 return base.NotFound();
             }
-
         }
-
-        [HttpPost]
-        public async Task<IActionResult> AddProductToCart(string productId, int quantity)
-        {
-                var user = this.userManager.GetUserId(this.User);
-                var (success,errors) = await this.storeService.AddProductToCart(user, productId, quantity);
-
-                if (success)
-                    return this.Ok();
-                else
-                    return base.BadRequest(errors);
-        }
-
-        
     }
 }

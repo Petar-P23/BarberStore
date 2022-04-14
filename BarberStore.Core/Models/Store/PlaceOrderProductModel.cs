@@ -1,6 +1,7 @@
 ﻿namespace BarberStore.Core.Models.Store;
 
-public class OrderProductViewModel : ProductViewModel
+public class PlaceOrderProductModel
 {
+    public string? Id { get; set; }
     public int Quantity { get; set; }
 }

@@ -4,7 +4,7 @@ namespace BarberStore.Core.Models.Appointments;
 
 public class UserAppointmentViewModel : CalendarAppointmentViewModel
 {
+    public string? Id { get; set; }
     public string? UserId { get; set; }
-    public IList<ServiceModel> Services { get; set; } = new List<ServiceModel>();
     public Status Status { get; set; }
 }

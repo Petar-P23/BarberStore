@@ -4,16 +4,18 @@ using BarberStore.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace BarberStore.Web.Data.Migrations
+namespace BarberStore.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220413181733_Cart-Product-Id")]
+    partial class CartProductId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +23,21 @@ namespace BarberStore.Web.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("AppointmentService", b =>
+                {
+                    b.Property<Guid>("AppointmentsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ServicesToDoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("AppointmentsId", "ServicesToDoId");
+
+                    b.HasIndex("ServicesToDoId");
+
+                    b.ToTable("AppointmentService");
+                });
 
             modelBuilder.Entity("BarberStore.Infrastructure.Data.Models.Announcement", b =>
                 {
@@ -281,10 +298,6 @@ namespace BarberStore.Web.Data.Migrations
 
             modelBuilder.Entity("BarberStore.Infrastructure.Data.Models.OrderProduct", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("OrderId")
                         .HasColumnType("uniqueidentifier");
 
@@ -294,9 +307,7 @@ namespace BarberStore.Web.Data.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
+                    b.HasKey("OrderId", "ProductId");
 
                     b.HasIndex("ProductId");
 
@@ -547,6 +558,21 @@ namespace BarberStore.Web.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("AppointmentService", b =>
+                {
+                    b.HasOne("BarberStore.Infrastructure.Data.Models.Appointment", null)
+                        .WithMany()
+                        .HasForeignKey("AppointmentsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BarberStore.Infrastructure.Data.Models.Service", null)
+                        .WithMany()
+                        .HasForeignKey("ServicesToDoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("BarberStore.Infrastructure.Data.Models.Announcement", b =>

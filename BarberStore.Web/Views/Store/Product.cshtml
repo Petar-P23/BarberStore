@@ -10,7 +10,7 @@
         <form method="post">
             <input name="quantity" class="quantity" type="number" value="1">
             <input name="productId" type="hidden" value="@Model.Id">
-            <input asp-controller="Store" asp-action="AddProductToCart" class="button" type="submit" value="Add to cart">
+            <input asp-controller="Store" asp-action="AddProductToCart" asp-route-returnUrl="/Store/Product/@Model.Id" class="button" type="submit" value="Add to cart">
         </form>
     </div>
     <h3>Description</h3>

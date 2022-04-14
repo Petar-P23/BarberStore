@@ -42,6 +42,12 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "default",
     pattern: "Home/{action=Index}/{id?}");
+app.MapControllerRoute(
+    name: "default",
+    pattern: "Store/{action=Explore}/{id?}");
+app.MapControllerRoute(
+    name: "default",
+    pattern: "Cart/{action=Cart}/{id?}");
 app.MapRazorPages();
 
 app.Run();

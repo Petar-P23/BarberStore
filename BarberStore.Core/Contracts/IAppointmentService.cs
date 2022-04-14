@@ -14,14 +14,6 @@ public interface IAppointmentService
     public Task<(bool, string)> CreateAppointment(AppointmentModel model);
 
     /// <summary>
-    /// Used to edit an appointment.
-    /// </summary>
-    /// <param name="userId">The user who owns the appointment.</param>
-    /// <param name="appointmentId"></param>
-    /// <param name="model">The model of the new appointment.</param>
-    /// <returns>True if the edit is successful, false and an error message if it fails.</returns>
-    public Task<(bool, string)> EditAppointment(string userId, string appointmentId, AppointmentModel model);
-    /// <summary>
     /// Used to cancel an appointment.
     /// </summary>
     /// <param name="userId">The user who has the appointment.</param>
@@ -53,4 +45,8 @@ public interface IAppointmentService
     /// </summary>
     /// <returns>All appointments with status pending and their services.</returns>
     public Task<IEnumerable<AdminPanelAppointmentViewModel>> GetAllPendingAppointments();
+
+    public Task<CalendarAppointmentViewModel> GetPreviousFreeAppointment(DateTime date, int workStart, int workEnd);
+    public Task<CalendarAppointmentViewModel> GetNextFreeAppointment(DateTime date, int workStart, int workEnd);
+    public Task<bool> CheckIfAppointmentExists(DateTime date);
 }

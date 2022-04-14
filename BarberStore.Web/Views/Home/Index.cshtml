@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<BarberStore.Core.Models.Announcements.AnnouncementViewModel>
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -12,14 +13,10 @@
     <section class="news">
         <h3>News</h3>
         <ul>
-            <li>The salon will not be open from date to date!</li>
-            <li>The salon will not be open from date to date!</li>
-            <li>The salon will not be open from date to date!</li>
-            <li>The salon will not be open from date to date!</li>
-            <li>The salon will not be open from date to date!</li>
-            <li>The salon will not be open from date to date!</li>
-            <li>The salon will not be open from date to date!</li>
-            <li>The salon will not be open from date to date!</li>
+            @foreach (var ann in Model)
+            {
+                <li>@ann.MainText</li>
+            }
         </ul>
     </section>
     <div class="left">
@@ -66,7 +63,7 @@
         <img src="~/img/LOREAL0279372.jpg" alt="">
         <div>
             <h2>Explore our store and check out all of our products!</h2>
-            <a href="">Store</a>
+            <a asp-controller="Store" asp-action="Index">Store</a>
         </div>
     </section>
 </div>

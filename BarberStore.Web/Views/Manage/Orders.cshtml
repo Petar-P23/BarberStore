@@ -1,0 +1,26 @@
+﻿@model System.Collections.Generic.IEnumerable<BarberStore.Core.Models.Store.OrderViewModel>
+@{
+    Layout = "_ManageLayout";
+    ViewData["Title"] = "Your Orders";
+}
+<table class="styled-table">
+    <thead>
+        <tr>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Products</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in @Model)
+        {
+            <tr>
+                <td>@order.Status.ToString()</td>
+                <td>@order.OrderTime.Date</td>
+                <td><p>@string.Join(Environment.NewLine,order.Products.Select(p=>$"{p.Name} - {p.Quantity}"))</p></td>
+                <td>@order.Products.Sum(p=>p.Quantity*p.Price).ToString("f2") lv.</td>
+            </tr>
+        }
+    </tbody>
+</table>

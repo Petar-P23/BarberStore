@@ -163,6 +163,7 @@ namespace BarberStore.Web.Areas.Identity.Pages.Account
                 await this._emailStore.SetEmailAsync(user, this.Input.Email, CancellationToken.None);
                 user.FirstName = this.Input.FirstName;
                 user.LastName = this.Input.LastName;
+                user.Cart = new Cart { User = user };
 
                 var result = await this._userManager.CreateAsync(user);
                 if (result.Succeeded)

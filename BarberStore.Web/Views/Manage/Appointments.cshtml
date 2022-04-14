@@ -1,0 +1,44 @@
+﻿@using BarberStore.Infrastructure.Data.Enums
+@model IEnumerable<BarberStore.Core.Models.Appointments.UserAppointmentViewModel>
+@{
+    Layout = "_ManageLayout";
+    ViewData["Title"] = "Your Appointments";
+}
+<table class="styled-table">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var appointment in Model)
+        {
+            var classText = @appointment.Status == Status.Cancelled ? "not-done" : "is-done";
+            <tr>
+                <td>@appointment.Start.Date.ToShortDateString()</td>
+                <td class="quantity">@appointment.Start.ToShortTimeString()</td>
+                <td class="@classText">@appointment.Status</td>
+                @if (appointment.Status != Status.Cancelled)
+                {
+                    <td>
+                        <a class="cancel" asp-route-returnUrl="/Manage/Appointments" asp-controller="Appointments" asp-action="Cancel" asp-route-id="@appointment.Id">Cancel</a>
+                    </td>
+                }
+                else
+                {
+                    <td>
+                    <p>None</p>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+@section Css
+{
+<link rel="stylesheet" href="~/css/profile-appointments.css">
+}

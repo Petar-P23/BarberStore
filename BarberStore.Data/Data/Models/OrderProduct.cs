@@ -6,6 +6,7 @@ namespace BarberStore.Infrastructure.Data.Models;
 
 public class OrderProduct
 {
+    [Key] public Guid Id { get; set; } = Guid.NewGuid();
     public Order Order { get; set; }
     [ForeignKey(nameof(Order))]
     public Guid OrderId { get; set; }

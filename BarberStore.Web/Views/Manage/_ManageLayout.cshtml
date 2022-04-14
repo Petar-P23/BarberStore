@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/css/general.css">
+    <link rel="stylesheet" href="~/css/profile-page.css">
+    <link rel="stylesheet" href="~/css/table.css">
+    @await RenderSectionAsync("Css", required: false)
+    <title>@ViewData["Title"]</title>
+</head>
+
+<body>
+<main>
+    <a class="back" asp-controller="Home" asp-action="Index">&larr;</a>
+    <div class="container">
+        <nav>
+            <ul>
+                <a asp-controller="Manage" asp-action="Orders" is-selected="">
+                    <li>
+                        Your orders
+                    </li>
+                </a>
+                <a asp-controller="Manage" asp-action="Appointments" is-selected="">
+                    <li>
+                        Your appointments
+                    </li>
+                </a>
+            </ul>
+        </nav>
+        <div class="content-container">
+            <div class="content">
+                    @RenderBody()
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+
+</html>
