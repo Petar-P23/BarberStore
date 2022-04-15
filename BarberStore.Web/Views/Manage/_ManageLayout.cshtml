@@ -28,6 +28,14 @@
                         Your appointments
                     </li>
                 </a>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-area="Administration" asp-controller="Appointments" asp-action="Manage" is-selected="">
+                        <li>
+                            Administration
+                        </li>
+                    </a>
+                }
             </ul>
         </nav>
         <div class="content-container">

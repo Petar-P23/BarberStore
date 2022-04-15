@@ -4,7 +4,7 @@ namespace BarberStore.Web.Areas.Administration.Controllers
 {
     public class StoreController : BaseController
     {
-        public IActionResult Index()
+        public IActionResult Manage()
         {
             return this.View();
         }

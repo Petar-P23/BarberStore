@@ -113,7 +113,6 @@ namespace BarberStore.Web.Controllers
 
             return this.RedirectToAction("BookAppointment");
         }
-
         //public async Task<IActionResult> Edit(string id, string[] serviceIds, DateTime appointmentTime)
         //{
         //    var user = this.userManager.GetUserId(this.User);

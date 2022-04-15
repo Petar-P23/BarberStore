@@ -1,6 +1,7 @@
 main {
     height: 100%;
     background-color: var(--light-rose-gold);
+    background-color: rgb(255, 246, 234);
 }
 
 a {
@@ -39,7 +40,7 @@ nav {
     width: 20vw;
     float: left;
     height: 100%;
-    background-color: rgb(255, 246, 234);
+    background-color: white;
     border-bottom-left-radius: 30px;
     border-top-left-radius: 30px;
     border-right: 2px dotted black;
@@ -65,13 +66,14 @@ nav a.selected li{
 }
 
     nav a:not(.selected) li:hover {
-        background-color: rgb(199, 122, 122);
+        background-color: var(--light-brown);
         color: white;
         transition: 0.3s;
     }
 
 .content-container {
-    background-color: rgb(255, 240, 221);
+    background-color: rgb(255, 246, 234);
+    background-color: white;
     height: 100%;
     border-radius: 30px;
 }

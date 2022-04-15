@@ -3,6 +3,14 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
+@{
+    if (this.User.Identity.IsAuthenticated)
+    {
+        var user = await UserManager.GetUserAsync(this.User);
+        this.ViewData["user"] = $"{user.FirstName} {user.LastName}";
+    }
+}
+
 <ul class="right">
 @if (SignInManager.IsSignedIn(User))
 {
@@ -10,7 +18,7 @@
         <a asp-area="" asp-controller="Cart" asp-action="Cart" title="Cart">Cart</a>
     </li>
     <li>
-        <a asp-area="" asp-controller="Manage" asp-action="Orders" title="Manage">Profile</a>
+        <a asp-area="" asp-controller="Manage" asp-action="Orders" title="Manage">@ViewData["user"]</a>
     </li>
     <li>
         <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">

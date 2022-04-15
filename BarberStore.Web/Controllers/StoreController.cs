@@ -71,5 +71,6 @@ namespace BarberStore.Web.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+        
     }
 }

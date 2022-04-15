@@ -4,6 +4,8 @@ using BarberStore.Core.Models.Appointments;
 using BarberStore.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using BarberStore.Infrastructure.Data.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace BarberStore.Web.Controllers
 {
@@ -12,14 +14,17 @@ namespace BarberStore.Web.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IServicesService _servicesService;
         private readonly IAnnouncementService _announcementService;
+        private readonly UserManager<ApplicationUser> userManager;
 
         public HomeController(ILogger<HomeController> logger,
             IServicesService servicesService,
-            IAnnouncementService announcementService)
+            IAnnouncementService announcementService, 
+            UserManager<ApplicationUser> userManager)
         {
             this._logger = logger;
             this._servicesService = servicesService;
             this._announcementService = announcementService;
+            this.userManager = userManager;
         }
 
         public IActionResult Welcome()

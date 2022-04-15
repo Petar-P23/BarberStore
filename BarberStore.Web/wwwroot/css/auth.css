@@ -4,7 +4,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background-color: rgb(247, 251, 255);
+    background-color: rgb(255, 246, 234);
 }
 
 .form, form {
