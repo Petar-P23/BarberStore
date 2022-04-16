@@ -9,7 +9,7 @@ namespace BarberStore.Web.Controllers
 {
     public class StoreController : Controller
     {
-        private const int DefaultPageSize = 20;
+        private const int DefaultPageSize = 4;
         private const int DefaultPage = 1;
         private readonly IStoreService storeService;
         private readonly UserManager<ApplicationUser> userManager;
@@ -23,8 +23,8 @@ namespace BarberStore.Web.Controllers
 
         public async Task<IActionResult> Explore(int page, int size, string category) //
         {
-            if (size == 0) size = DefaultPageSize;
-            if (page == 0) page = DefaultPage;
+            if (size <= 0) size = DefaultPageSize;
+            if (page <= 0) page = DefaultPage;
 
             var products = await this.storeService.GetStorePage(page - 1, size, category);
             return this.View(products);
@@ -41,7 +41,7 @@ namespace BarberStore.Web.Controllers
             return this.View(product);
         }
         [HttpGet]
-        public async Task<IActionResult> AddProductToCart(string returnUrl)
+        public IActionResult AddProductToCart(string returnUrl)
         {
             return Redirect(returnUrl);
         }

@@ -1,8 +1,56 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using BarberStore.Infrastructure.Data.Enums
+@model IEnumerable<BarberStore.Core.Models.Appointments.AdminPanelAppointmentViewModel>
+@{
+    ViewData["Title"] = "Manage Appointments";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome To Admin Area</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h1>Check appointments</h1>
+<form class="check-available" method="post">
+    <input type="date" name="date">
+    <input asp-area="Administration" asp-controller="Appointments" asp-action="Manage" class="check-button" type="submit" value="Check">
+</form>
+@if (Model != null)
+{
+    <table class="styled-table">
+        <thead>
+        <tr>
+            <th>Person</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        @foreach (var appointment in Model)
+        {
+            var classText = @appointment.Status == Status.Cancelled ? "not-done" : "is-done";
+            <tr>
+                <td>@appointment.UserFirstName @appointment.UserLastName</td>
+                <td>@appointment.Start.Date.ToShortDateString()</td>
+                <td class="quantity">@appointment.Start.ToShortTimeString()</td>
+                <td class="@classText">@appointment.Status</td>
+                @if (appointment.Status != Status.Cancelled)
+                {
+                    <td>
+                        <a class="cancel" asp-area="Administration" asp-controller="Appointments" asp-action="Cancel" asp-route-id="@appointment.Id" asp-route-userId="@appointment.UserId">Cancel</a>
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        <p>None</p>
+                    </td>
+                }
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+@section Css
+{
+    <link rel="stylesheet" href="~/css/appointments.css">
+    <link rel="stylesheet" href="~/css/admin-appointments.css">
+
+}

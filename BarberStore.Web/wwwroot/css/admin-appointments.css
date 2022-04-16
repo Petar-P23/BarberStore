@@ -1,0 +1,21 @@
+﻿form.check-available {
+    box-shadow: none;
+}
+form.check-available input:first-child {
+    width: 300px;
+    margin: auto;
+    margin-bottom: 20px;
+}
+
+a.cancel {
+    background-color: var(--light-brown);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 2px;
+}
+
+a.cancel:hover {
+    background-color: rgb(255, 160, 116);
+    transition: 0.3s;
+    color: black;
+}

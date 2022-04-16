@@ -1,18 +1,27 @@
 ﻿@model BarberStore.Core.Models.Store.StorePageViewModel
 @{
     ViewData["Title"] = "Explore";
-    int counter = 4;
+    int counter = 3;
 }
 <header>
     <div>
-        <h1>Store</h1><br/>
+        <h1>Store</h1><br />
         <p>Page @Model.PageNumber of @(Model.PagesCount==0?1:@Model.PagesCount)</p>
+
+        @if (@Model.PageNumber != 1)
+        {
+            <a asp-controller="Store" asp-action="Explore" asp-route-page="@(Model.PageNumber-1)">Previous page</a>
+        }
+        @if (@Model.PageNumber != @Model.PagesCount)
+        {
+            <a asp-controller="Store" asp-action="Explore" asp-route-page="@(Model.PageNumber+1)">Next page</a>
+        }
     </div>
 </header>
 <div class="products">
     @foreach (var product in @Model?.Products)
     {
-        @if (counter == 4)
+        @if (counter == 3)
         {
             @Html.Raw("<div class=\"row\">")
         }
@@ -24,12 +33,20 @@
             <p>@product.Price lv.</p>
             <a class="buy-button" asp-controller="Store" asp-action="Product" asp-route-id="@product.Id">Buy</a>
         </div>
+        counter++;
         @if (counter == 4)
+        {
+            counter = 0;
+        }
+        @if (counter == 3)
         {
             @Html.Raw("</div>")
             counter = 0;
         }
-        counter++;
+    }
+    @if (counter != 0)
+    {
+        @Html.Raw("</div>")
     }
 </div>
 @section Css

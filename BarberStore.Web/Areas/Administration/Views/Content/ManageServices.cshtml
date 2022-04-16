@@ -1,0 +1,24 @@
+﻿<div class="row">
+    <div>
+        <form method="post" enctype="multipart/form-data">
+            <h3>Add service</h3>
+            <div>
+                <label>Name</label>
+                <input name="name" type="text" />
+            </div>
+            <div>
+                <label>Price</label>
+                <input name="price" type="number" />
+            </div>
+            <div>
+                <label>Description</label>
+                <input name="description" type="text" />
+            </div>
+            <input asp-area="Administration" asp-controller="Content" asp-action="AddService" class="submit" type="submit" />
+        </form>
+    </div>
+</div>
+@section Css
+{
+    <link rel="stylesheet" href="~/css/manage-content.css">
+}

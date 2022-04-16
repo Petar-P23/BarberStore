@@ -17,7 +17,7 @@ public class AppointmentService : DataService, IAppointmentService
     {
 
     }
-    public async Task<(bool, string)> CreateAppointment(AppointmentModel model)
+    public async Task<(bool, string)> CreateAppointmentAsync(AppointmentModel model)
     {
         try
         {
@@ -49,7 +49,7 @@ public class AppointmentService : DataService, IAppointmentService
         return (true, string.Empty);
     }
 
-    public async Task<(bool, string)> ChangeAppointmentStatus(string userId, string appointmentId, Status status)
+    public async Task<(bool, string)> ChangeAppointmentStatusAsync(string userId, string appointmentId, Status status)
     {
         try
         {
@@ -74,11 +74,11 @@ public class AppointmentService : DataService, IAppointmentService
 
         return (true, string.Empty);
     }
-    public async Task<(bool, string)> CancelAppointment(string userId, string appointmentId)
+    public async Task<(bool, string)> CancelAppointmentAsync(string userId, string appointmentId)
     {
-        return await ChangeAppointmentStatus(userId, appointmentId, Status.Cancelled);
+        return await ChangeAppointmentStatusAsync(userId, appointmentId, Status.Cancelled);
     }
-    public async Task<IEnumerable<CalendarAppointmentViewModel>> GetAllAppointmentsByMonth(int month)
+    public async Task<IEnumerable<CalendarAppointmentViewModel>> GetAllAppointmentsByMonthAsync(int month)
     {
         Guard.AgainstOutOfRange(month, 1, 12, nameof(month));
         var appointments = await this.repo.All<Appointment>()
@@ -89,7 +89,7 @@ public class AppointmentService : DataService, IAppointmentService
 
         return appointments;
     }
-    public async Task<IEnumerable<UserAppointmentViewModel>> GetUserAppointments(string userId)
+    public async Task<IEnumerable<UserAppointmentViewModel>> GetUserAppointmentsAsync(string userId)
     {
         Guard.AgainstNullOrWhiteSpaceString(userId, nameof(userId));
         var appointments = await this.repo.All<Appointment>()
@@ -107,27 +107,30 @@ public class AppointmentService : DataService, IAppointmentService
 
         return appointments;
     }
-    public async Task<IEnumerable<AdminPanelAppointmentViewModel>> GetAllPendingAppointments()
+    public async Task<IEnumerable<AdminPanelAppointmentViewModel>> GetAllAppointmentsByDateAsync(DateTime date)
     {
         var appointments = await this.repo.All<Appointment>()
-            .Where(a => a.Status == Status.Pending)
+            .Where(a => a.Start.Date == date.Date)
             .Select(a => new AdminPanelAppointmentViewModel
             {
-                Start = a.Start,
+                Id = a.Id.ToString(),
                 UserId = a.UserId,
+                Start = a.Start,
+                UserFirstName = a.User.FirstName,
+                UserLastName = a.User.LastName,
                 Status = a.Status
             })
-            .OrderByDescending(a => a.Start)
+            .OrderByDescending(a => a.Status)
             .ThenByDescending(a => a.Start)
             .ToListAsync();
 
         return appointments;
     }
 
-    public async Task<CalendarAppointmentViewModel> GetPreviousFreeAppointment(DateTime date, int workStart, int workEnd)
+    public async Task<CalendarAppointmentViewModel> GetPreviousFreeAppointmentAsync(DateTime date, int workStart, int workEnd)
     {
 
-        while (await CheckIfAppointmentExists(date))
+        while (await CheckIfAppointmentExistsAsync(date))
         {
             date = date.AddMinutes(-30);
             if (date.Hour >= workStart) continue;
@@ -138,7 +141,7 @@ public class AppointmentService : DataService, IAppointmentService
         if (date < DateTime.Now) return null;
         return new CalendarAppointmentViewModel { Start = date };
     }
-    public async Task<CalendarAppointmentViewModel> GetNextFreeAppointment(DateTime date, int workStart, int workEnd)
+    public async Task<CalendarAppointmentViewModel> GetNextFreeAppointmentAsync(DateTime date, int workStart, int workEnd)
     {
         if (date.Minute is not (30 or 0) || date < DateTime.Now)
         {
@@ -156,7 +159,7 @@ public class AppointmentService : DataService, IAppointmentService
             }
         }
 
-        while (await CheckIfAppointmentExists(date))
+        while (await CheckIfAppointmentExistsAsync(date))
         {
             date = date.AddMinutes(30);
             if (date.Hour < workEnd) continue;
@@ -167,7 +170,7 @@ public class AppointmentService : DataService, IAppointmentService
         return new CalendarAppointmentViewModel { Start = date };
     }
 
-    public async Task<bool> CheckIfAppointmentExists(DateTime date)
+    public async Task<bool> CheckIfAppointmentExistsAsync(DateTime date)
     {
         var test = await this.repo.All<Appointment>()
             .Where(a => a.Status != Status.Cancelled)

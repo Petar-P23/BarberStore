@@ -4,6 +4,7 @@
 
 .content img {
     margin: 10px 60px;
+    max-width: 500px;
     float: left;
 }
 

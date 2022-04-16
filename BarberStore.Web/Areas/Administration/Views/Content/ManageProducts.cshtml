@@ -1,0 +1,36 @@
+﻿@model BarberStore.Infrastructure.Data.Models.Product
+@{
+    ViewData["Title"] = "Manage products";
+}
+<div class="row">
+    <div>
+        <form method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="validation-div text-danger"></div>
+
+            <h3>Add product</h3>
+            <label asp-for="Name"></label>
+            <input asp-for="Name" type="text"/>
+            <span asp-validation-for="Name" class="text-danger"></span>
+
+            <label>Image</label>
+            <input name="image" type="file" accept="image/*">
+
+            <label asp-for="Price"></label>
+            <input asp-for="Price" type="number" step=".01"/>
+            <span asp-validation-for="Price" class="text-danger"></span>
+
+            <label asp-for="Description"></label>
+            <input asp-for="Description" type="text"/>
+            <span asp-validation-for="Description" class="text-danger"></span>
+
+            <input asp-area="Administration" asp-controller="Content" asp-action="AddProduct" class="submit" type="submit"/>
+        </form>
+    </div>
+</div>
+@section Css
+{
+<link rel="stylesheet" href="~/css/manage-content.css">
+}
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

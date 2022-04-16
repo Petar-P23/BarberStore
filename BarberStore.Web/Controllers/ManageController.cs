@@ -35,7 +35,7 @@ namespace BarberStore.Web.Controllers
         {
             var userId = this.userManager.GetUserId(User);
             IEnumerable<UserAppointmentViewModel> appointments = 
-                await this.appointmentService.GetUserAppointments(userId);
+                await this.appointmentService.GetUserAppointmentsAsync(userId);
             return View(appointments);
         }
     }

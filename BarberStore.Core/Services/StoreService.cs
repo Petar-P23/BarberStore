@@ -249,4 +249,47 @@ public class StoreService : DataService, IStoreService
             .OrderByDescending(o => o.OrderTime)
             .ToListAsync();
     }
+
+    public async Task MarkOrderAsFinisedAsync(string orderId)
+    {
+        Guard.AgainstNullOrWhiteSpaceString(orderId, nameof(orderId));
+        var order = await this.repo.All<Order>()
+            .Where(o => o.Id.ToString() == orderId)
+            .FirstOrDefaultAsync();
+        Guard.AgainstNull(order, nameof(order));
+
+        order.Status = Status.Finished;
+        await this.repo.SaveChangesAsync();
+    }
+
+    public async Task<bool> CreateNewProduct(string name, string imageName, decimal price, string description)
+     => await CreateNewProduct(name, imageName, price, description, "General");
+
+    public async Task<bool> CreateNewProduct(string name, string imageName, decimal price, string description,
+        string categoryName)
+    {
+        try
+        {
+            var category = await this.repo.All<Category>()
+                .FirstOrDefaultAsync(c => c.Name == categoryName);
+
+            var product = new Product
+            {
+                Name = name,
+                Description = description,
+                ImagePath = imageName,
+                Price = price,
+                Category = category,
+            };
+
+            await this.repo.AddAsync(product);
+            await this.repo.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+
+        return true;
+    }
 }

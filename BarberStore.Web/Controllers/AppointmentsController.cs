@@ -24,7 +24,7 @@ namespace BarberStore.Web.Controllers
         {
             var userId = this.userManager.GetUserId(User);
             var userAppointments =
-                await this.appointmentService.GetUserAppointments(userId);
+                await this.appointmentService.GetUserAppointmentsAsync(userId);
 
             return View(new AppointmentsPageViewModel
             {
@@ -43,14 +43,14 @@ namespace BarberStore.Web.Controllers
 
             var userId = this.userManager.GetUserId(User);
             var userAppointments =
-                await this.appointmentService.GetUserAppointments(userId);
+                await this.appointmentService.GetUserAppointmentsAsync(userId);
 
-            if (await this.appointmentService.CheckIfAppointmentExists(date))
+            if (await this.appointmentService.CheckIfAppointmentExistsAsync(date))
             {
                 var previous =
-                    await this.appointmentService.GetPreviousFreeAppointment(date, 9, 18);
+                    await this.appointmentService.GetPreviousFreeAppointmentAsync(date, 9, 18);
                 var next =
-                    await this.appointmentService.GetNextFreeAppointment(date, 9, 18);
+                    await this.appointmentService.GetNextFreeAppointmentAsync(date, 9, 18);
 
                 return View(new AppointmentsPageViewModel
                 {
@@ -71,7 +71,7 @@ namespace BarberStore.Web.Controllers
 
             if (date < DateTime.Now)
             {
-                pageModel.Next = await this.appointmentService.GetNextFreeAppointment(DateTime.Now, 9, 18);
+                pageModel.Next = await this.appointmentService.GetNextFreeAppointmentAsync(DateTime.Now, 9, 18);
                 pageModel.Current = null;
             }
             return View(pageModel);
@@ -81,7 +81,7 @@ namespace BarberStore.Web.Controllers
         {
             var user = this.userManager.GetUserId(this.User);
 
-            var (success, error) = await this.appointmentService.CancelAppointment(user, id);
+            var (success, error) = await this.appointmentService.CancelAppointmentAsync(user, id);
             if (!success)
             {
                 return this.BadRequest(error);
@@ -105,7 +105,7 @@ namespace BarberStore.Web.Controllers
                 UserId = user,
             };
 
-            var (success, error) = await this.appointmentService.CreateAppointment(appointment);
+            var (success, error) = await this.appointmentService.CreateAppointmentAsync(appointment);
             if (!success)
             {
                 return this.BadRequest(error);

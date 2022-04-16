@@ -60,4 +60,8 @@ public interface IStoreService
     /// <param name="status"></param>
     /// <returns>Returns a collection of order view models.</returns>
     public Task<IEnumerable<OrderViewModel>> GetAllOrdersByStatus(Status status);
+
+    public Task MarkOrderAsFinisedAsync(string orderId);
+    Task<bool> CreateNewProduct(string name, string imageName, decimal price, string description);
+    Task<bool> CreateNewProduct(string name, string imageName, decimal price, string description, string categoryName);
 }

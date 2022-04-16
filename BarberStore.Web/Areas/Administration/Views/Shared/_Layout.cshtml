@@ -23,9 +23,19 @@
                         Manage Appointments
                     </li>
                 </a>
-                <a asp-area="Administration" asp-controller="Content" asp-action="Manage" is-selected="">
+                <a asp-area="Administration" asp-controller="Content" asp-action="ManageProducts" is-selected="">
                     <li>
-                        Manage Content
+                        Manage Products
+                    </li>
+                </a>
+                <a asp-area="Administration" asp-controller="Content" asp-action="ManageServices" is-selected="">
+                    <li>
+                        Manage Services
+                    </li>
+                </a>
+                <a asp-area="Administration" asp-controller="Content" asp-action="ManageAnnouncements" is-selected="">
+                    <li>
+                        Manage Announcements
                     </li>
                 </a>
                 <a asp-area="Administration" asp-controller="Store" asp-action="Manage" is-selected="">
@@ -42,6 +52,7 @@
         </div>
     </div>
 </main>
+@await RenderSectionAsync("Scripts", required: false)
 </body>
 
 </html>

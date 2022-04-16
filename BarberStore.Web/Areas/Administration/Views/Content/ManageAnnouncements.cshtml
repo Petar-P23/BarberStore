@@ -1,0 +1,16 @@
+﻿<div class="row">
+    <div>
+        <form method="post" enctype="multipart/form-data">
+            <h3>Add announcement</h3>
+            <div>
+                <label>Text</label>
+                <input name="mainText" type="text" />
+            </div>
+            <input asp-area="Administration" asp-controller="Content" asp-action="AddAnnouncement" class="submit" type="submit" />
+        </form>
+    </div>
+</div>
+@section Css
+{
+    <link rel="stylesheet" href="~/css/manage-content.css">
+}
