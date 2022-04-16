@@ -15,6 +15,9 @@ public interface IStoreService
     /// <param name="category">Filters products by category.</param>
     /// <returns>Returns a store page view model.</returns>
     public Task<StorePageViewModel> GetStorePageAsync(int page, int size, string category = "");
+
+    public Task<StorePageViewModel> GetStorePageAsync(int page, int size,
+        Expression<Func<Product, object>> orderByExpression, string category = "");
     /// <summary>
     /// Used to get the number of all pages.
     /// </summary>

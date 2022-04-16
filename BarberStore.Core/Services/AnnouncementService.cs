@@ -19,7 +19,7 @@ public class AnnouncementService : DataService, IAnnouncementService
     {
         try
         {
-            Guard.AgainstNull(mainText);
+            Guard.AgainstNullOrWhiteSpaceString(mainText);
             var announcementEntity = new Announcement
             {
                 MainText = mainText,
@@ -53,12 +53,15 @@ public class AnnouncementService : DataService, IAnnouncementService
     }
     public async Task<IEnumerable<AnnouncementViewModel>> GetAllAnnouncementsAsync(int count)
     {
+        if (count <= 0) return null;
         return await this.GetAllAnnouncementsAsQueryable()
             .Take(count)
             .ToListAsync();
     }
     public async Task<IEnumerable<AnnouncementViewModel>> GetAllAnnouncementsAsync(int count, int page)
     {
+        if (count <= 0||page<=-1) return null;
+
         return await this.GetAllAnnouncementsAsQueryable()
             .Skip(page * count)
             .Take(count)
@@ -68,11 +71,11 @@ public class AnnouncementService : DataService, IAnnouncementService
     {
         return await this.GetAllAnnouncementsAsync(10);
     }
-
     public async Task<bool> RemoveAnnouncementAsync(string id)
     {
         try
         {
+            Guard.AgainstNullOrWhiteSpaceString(id);
             await this.repo.DeleteAsync<Announcement>(Guid.Parse(id));
             await this.repo.SaveChangesAsync();
         }

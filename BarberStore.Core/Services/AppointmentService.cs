@@ -55,8 +55,8 @@ public class AppointmentService : DataService, IAppointmentService
         {
             var appointment = await this.repo
                 .All<Appointment>()
-                .Where(a => a.UserId == userId && a.Id.ToString() == appointmentId)
-                .SingleOrDefaultAsync();
+                .Where(a => a.UserId == userId && a.Id == Guid.Parse(appointmentId))
+                .FirstOrDefaultAsync();
             Guard.AgainstNull(appointment);
 
             appointment.Status = status;
@@ -126,9 +126,12 @@ public class AppointmentService : DataService, IAppointmentService
 
         return appointments;
     }
-
     public async Task<CalendarAppointmentViewModel> GetPreviousFreeAppointmentAsync(DateTime date, int workStart, int workEnd)
     {
+        if (workStart == workEnd || workStart == 0 || workEnd == 0)
+        {
+            return null;
+        }
 
         while (await CheckIfAppointmentExistsAsync(date))
         {
@@ -143,6 +146,11 @@ public class AppointmentService : DataService, IAppointmentService
     }
     public async Task<CalendarAppointmentViewModel> GetNextFreeAppointmentAsync(DateTime date, int workStart, int workEnd)
     {
+        if (workStart == workEnd || workStart == 0 || workEnd == 0)
+        {
+            return null;
+        }
+
         if (date.Minute is not (30 or 0) || date < DateTime.Now)
         {
             var now = DateTime.Now;
@@ -172,10 +180,6 @@ public class AppointmentService : DataService, IAppointmentService
 
     public async Task<bool> CheckIfAppointmentExistsAsync(DateTime date)
     {
-        var test = await this.repo.All<Appointment>()
-            .Where(a => a.Status != Status.Cancelled)
-            .ToListAsync();
-        test = test.Where(a => a.Start == date).ToList();
         var exists = await this.repo.All<Appointment>()
             .Where(a => a.Start == date && a.Status != Status.Cancelled)
             .FirstOrDefaultAsync() != null;

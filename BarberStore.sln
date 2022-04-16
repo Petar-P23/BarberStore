@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BarberStore.Core", "BarberS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BarberStore.Infrastructure", "BarberStore.Data\BarberStore.Infrastructure.csproj", "{D3994BB9-AD66-4567-BE6F-7995D759073D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarberStore.Tests", "BarberStore.Tests\BarberStore.Tests.csproj", "{61B0282B-29B3-41FE-8E38-0DD9661F5109}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{D3994BB9-AD66-4567-BE6F-7995D759073D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3994BB9-AD66-4567-BE6F-7995D759073D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3994BB9-AD66-4567-BE6F-7995D759073D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61B0282B-29B3-41FE-8E38-0DD9661F5109}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61B0282B-29B3-41FE-8E38-0DD9661F5109}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61B0282B-29B3-41FE-8E38-0DD9661F5109}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61B0282B-29B3-41FE-8E38-0DD9661F5109}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

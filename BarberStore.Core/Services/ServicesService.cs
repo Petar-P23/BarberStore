@@ -1,4 +1,5 @@
-﻿using BarberStore.Core.Contracts;
+﻿using BarberStore.Core.Common;
+using BarberStore.Core.Contracts;
 using BarberStore.Core.Models.Appointments;
 using BarberStore.Infrastructure.Data.Models;
 using BarberStore.Infrastructure.Data.Repositories;
@@ -31,6 +32,10 @@ public class ServicesService : DataService, IServicesService
     {
         try
         {
+            Guard.AgainstNullOrWhiteSpaceString(name);
+            Guard.AgainstNullOrWhiteSpaceString(description);
+            if (price <= 0) throw new ArgumentException("Price cannot be less than 0");
+
             var service = new Service
             {
                 Name = name,
@@ -53,6 +58,8 @@ public class ServicesService : DataService, IServicesService
     {
         try
         {
+            Guard.AgainstNullOrWhiteSpaceString(id);
+
             await this.repo.DeleteAsync<Service>(Guid.Parse(id));
             await this.repo.SaveChangesAsync();
         }

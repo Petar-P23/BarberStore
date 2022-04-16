@@ -18,10 +18,10 @@ public class StoreService : DataService, IStoreService
     }
     public async Task<StorePageViewModel> GetStorePageAsync(int page, int size, string category = "")
     {
-        return await this.GetStorePage(page, size, p => p.Price, category);
+        return await this.GetStorePageAsync(page, size, p => p.Price, category);
     }
 
-    public async Task<StorePageViewModel> GetStorePage(int page, int size, Expression<Func<Product, object>> orderByExpression, string category = "")
+    public async Task<StorePageViewModel> GetStorePageAsync(int page, int size, Expression<Func<Product, object>> orderByExpression, string category = "")
     {
         var noFilter = string.IsNullOrWhiteSpace(category);
         var pageCount = await this.GetProductPagesCountAsync(size, p => p.Category.Name == category || noFilter);
@@ -42,6 +42,8 @@ public class StoreService : DataService, IStoreService
                 Image = p.ImagePath
             }).ToListAsync();
 
+        if (pageCount == 0) pageCount = 1;
+
         return new StorePageViewModel
         {
             PageNumber = page + 1,
@@ -53,6 +55,7 @@ public class StoreService : DataService, IStoreService
     public async Task<int> GetProductPagesCountAsync(int size, Expression<Func<Product, bool>> filterExpression)
     {
         Guard.AgainstNull(filterExpression, nameof(filterExpression));
+        if (size == 0) return 0;
 
         return (int)Math.Ceiling(await this.repo.All<Product>()
             .Where(filterExpression)
@@ -62,9 +65,18 @@ public class StoreService : DataService, IStoreService
     public async Task<ProductPageViewModel?> GetProductPageAsync(string productId)
     {
         Guard.AgainstNullOrWhiteSpaceString(productId, nameof(productId));
+        Guid id;
+        try
+        {
+            id = Guid.Parse(productId);
+        }
+        catch (Exception)
+        {
+            return null;
+        }
 
         var product = await this.repo.All<Product>()
-            .Where(p => p.Id.ToString() == productId)
+            .Where(p => p.Id == id)
             .Select(p => new ProductPageViewModel
             {
                 Id = p.Id.ToString(),
@@ -80,6 +92,10 @@ public class StoreService : DataService, IStoreService
 
     public async Task<(bool, string)> AddProductToCartAsync(string? userId, string? productId, int quantity = 1)
     {
+        if (quantity <= 0)
+        {
+            return (false, "Quantity cannot be zero.");
+        }
         try
         {
             var user = await this.repo.All<ApplicationUser>()
@@ -138,6 +154,8 @@ public class StoreService : DataService, IStoreService
 
         if (cart != null) return cart;
 
+        if (!await this.repo.All<ApplicationUser>().AnyAsync(u => u.Id == userId)) return null;
+
         var cartId = Guid.NewGuid();
         var newCart = new Cart
         {
@@ -157,6 +175,7 @@ public class StoreService : DataService, IStoreService
         {
             Guard.AgainstNull(products, nameof(products));
             Guard.AgainstNullOrWhiteSpaceString(userId, nameof(userId));
+            if (products.Any(p => p.Quantity <= 0)) return (false, "Quantity cannot be less than 1.");
 
             var order = new Order
             {
@@ -203,6 +222,8 @@ public class StoreService : DataService, IStoreService
     public async Task<IEnumerable<OrderViewModel>> GetOrdersByUserAsync(string userId)
     {
         Guard.AgainstNullOrWhiteSpaceString(userId, nameof(userId));
+
+        if (!await this.repo.All<ApplicationUser>().AnyAsync(u => u.Id == userId)) return null;
 
         return await this.repo.All<Order>()
             .Where(o => o.User.Id == userId)
@@ -254,7 +275,7 @@ public class StoreService : DataService, IStoreService
     {
         Guard.AgainstNullOrWhiteSpaceString(orderId, nameof(orderId));
         var order = await this.repo.All<Order>()
-            .Where(o => o.Id.ToString() == orderId)
+            .Where(o => o.Id == Guid.Parse(orderId))
             .FirstOrDefaultAsync();
         Guard.AgainstNull(order, nameof(order));
 
@@ -268,10 +289,11 @@ public class StoreService : DataService, IStoreService
     public async Task<bool> CreateNewProductAsync(string name, string imageName, decimal price, string description,
         string categoryName)
     {
+        if (price <= 0) return false;
         try
         {
             var category = await this.repo.All<Category>()
-                .FirstOrDefaultAsync(c => c.Name == categoryName);
+                .FirstOrDefaultAsync(c => c.Name == categoryName) ?? new Category { Name = categoryName };
 
             var product = new Product
             {
@@ -285,7 +307,7 @@ public class StoreService : DataService, IStoreService
             await this.repo.AddAsync(product);
             await this.repo.SaveChangesAsync();
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return false;
         }
@@ -297,6 +319,7 @@ public class StoreService : DataService, IStoreService
     {
         try
         {
+            Guard.AgainstNullOrWhiteSpaceString(id);
             await this.repo.DeleteAsync<Product>(Guid.Parse(id));
             await this.repo.SaveChangesAsync();
         }

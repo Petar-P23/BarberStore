@@ -4,7 +4,6 @@ namespace BarberStore.Core.Contracts;
 
 public interface IServicesService
 {
-    public Task<IEnumerable<ServiceModel>> GetServicesAsync();
     ///// <summary>
     /////
     ///// </summary>
@@ -40,6 +39,7 @@ public interface IServicesService
     ///// <param name="article"></param>
     ///// <returns>Returns true if creation was successful, else an error is returned.</returns>
     //public Task<(bool, string)> CreateArticle(string userId, ArticleModel? article);
+    public Task<IEnumerable<ServiceModel>> GetServicesAsync();
     Task<bool> CreateServiceAsync(string name, string description, decimal price);
     Task<bool> RemoveServiceAsync(string id);
 }
