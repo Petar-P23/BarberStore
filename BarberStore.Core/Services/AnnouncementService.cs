@@ -15,15 +15,15 @@ public class AnnouncementService : DataService, IAnnouncementService
     {
     }
 
-    public async Task<(bool, string)> CreateAnnouncement(string userId, AnnouncementModel? announcement)
+    public async Task<(bool, string)> CreateAnnouncementAsync(string mainText)
     {
         try
         {
-            Guard.AgainstNull(announcement);
+            Guard.AgainstNull(mainText);
             var announcementEntity = new Announcement
             {
-                MainText = announcement.MainText,
-                PublishDate = DateTime.Now,
+                MainText = mainText,
+                PublishDate = DateTime.Now
             };
 
             await this.repo.AddAsync(announcementEntity);
@@ -47,25 +47,40 @@ public class AnnouncementService : DataService, IAnnouncementService
             })
             .OrderByDescending(a => a.PublishDate);
     }
-    public async Task<IEnumerable<AnnouncementViewModel>> GetAllAnnouncements()
+    public async Task<IEnumerable<AnnouncementViewModel>> GetAllAnnouncementsAsync()
     {
         return await this.GetAllAnnouncementsAsQueryable().ToListAsync();
     }
-    public async Task<IEnumerable<AnnouncementViewModel>> GetAllAnnouncements(int count)
+    public async Task<IEnumerable<AnnouncementViewModel>> GetAllAnnouncementsAsync(int count)
     {
         return await this.GetAllAnnouncementsAsQueryable()
             .Take(count)
             .ToListAsync();
     }
-    public async Task<IEnumerable<AnnouncementViewModel>> GetAllAnnouncements(int count, int page)
+    public async Task<IEnumerable<AnnouncementViewModel>> GetAllAnnouncementsAsync(int count, int page)
     {
         return await this.GetAllAnnouncementsAsQueryable()
             .Skip(page * count)
             .Take(count)
             .ToListAsync();
     }
-    public async Task<IEnumerable<AnnouncementViewModel>> GetTopAnnouncements()
+    public async Task<IEnumerable<AnnouncementViewModel>> GetTopAnnouncementsAsync()
     {
-        return await this.GetAllAnnouncements(10);
+        return await this.GetAllAnnouncementsAsync(10);
+    }
+
+    public async Task<bool> RemoveAnnouncementAsync(string id)
+    {
+        try
+        {
+            await this.repo.DeleteAsync<Announcement>(Guid.Parse(id));
+            await this.repo.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+
+        return true;
     }
 }

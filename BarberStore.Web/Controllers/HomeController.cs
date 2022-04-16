@@ -34,7 +34,7 @@ namespace BarberStore.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            IEnumerable<AnnouncementViewModel> announcements = await this._announcementService.GetTopAnnouncements();
+            IEnumerable<AnnouncementViewModel> announcements = await this._announcementService.GetTopAnnouncementsAsync();
             return this.View(announcements);
         }
         public async Task<IActionResult> Services()

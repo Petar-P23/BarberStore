@@ -10,11 +10,17 @@
     {
         <div class="service">
             <h3>@service.Name - @service.Price</h3>
-            <p>@service.Description</p>
+            <p>
+                @service.Description
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-area="Administration" asp-controller="Content" asp-action="RemoveService" asp-route-id="@service.Id" asp-route-returnUrl="/Home/Services">X</a>
+                }
+            </p>
         </div>
     }
 </div>
 @section Css
 {
-    <link rel="stylesheet" href="~/css/services-styles.css">
+<link rel="stylesheet" href="~/css/services-styles.css">
 }

@@ -15,7 +15,13 @@
         <ul>
             @foreach (var ann in Model)
             {
-                <li>@ann.MainText</li>
+                <li>
+                    @ann.MainText
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a class="remove" asp-area="Administration" asp-controller="Content" asp-action="RemoveAnnouncement" asp-route-id="@ann.Id" asp-route-returnUrl="/Home/Index">X</a>
+                    }
+                </li>
             }
         </ul>
     </section>

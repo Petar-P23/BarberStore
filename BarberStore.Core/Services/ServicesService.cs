@@ -20,10 +20,48 @@ public class ServicesService : DataService, IServicesService
             .ThenBy(s => s.Price)
             .Select(s => new ServiceModel
             {
+                Id = s.Id.ToString(),
                 Name = s.Name,
                 Price = s.Price,
                 Description = s.Description
             }).ToArrayAsync();
+    }
+
+    public async Task<bool> CreateServiceAsync(string name, string description, decimal price)
+    {
+        try
+        {
+            var service = new Service
+            {
+                Name = name,
+                Price = price,
+                Description = description
+            };
+
+            await this.repo.AddAsync(service);
+            await this.repo.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    public async Task<bool> RemoveServiceAsync(string id)
+    {
+        try
+        {
+            await this.repo.DeleteAsync<Service>(Guid.Parse(id));
+            await this.repo.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     //public async Task<(bool, string)> CreateArticle(string userId, ArticleModel? article)

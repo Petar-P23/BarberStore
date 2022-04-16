@@ -22,3 +22,18 @@ header {
 .service p{
     color: #8A7063;
 }
+.service a {
+    text-decoration: none;
+    background-color: var(--light-brown);
+    color: white;
+    padding: 3px 10px;
+    border-radius: 3px;
+    box-shadow: 0px 1px 7px 1px rgba(0, 0, 0, 0.151);
+    transition: 0.3s;
+}
+
+.service a:hover {
+    transition: 0.3s;
+    background-color: rgb(230, 25, 25);
+    box-shadow: 0px 1px 7px 5px rgba(0, 0, 0, 0.151);
+}

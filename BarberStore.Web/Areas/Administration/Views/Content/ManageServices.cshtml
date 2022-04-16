@@ -2,18 +2,15 @@
     <div>
         <form method="post" enctype="multipart/form-data">
             <h3>Add service</h3>
-            <div>
                 <label>Name</label>
-                <input name="name" type="text" />
-            </div>
-            <div>
+            <input name="name" type="text" />
+
                 <label>Price</label>
-                <input name="price" type="number" />
-            </div>
-            <div>
+            <input name="price" type="number" step=".01"/>
+
                 <label>Description</label>
-                <input name="description" type="text" />
-            </div>
+            <input name="description" type="text" />
+
             <input asp-area="Administration" asp-controller="Content" asp-action="AddService" class="submit" type="submit" />
         </form>
     </div>

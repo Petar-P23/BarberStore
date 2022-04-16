@@ -23,7 +23,7 @@ namespace BarberStore.Web.Controllers
             try
             {
                 var user = this.userManager.GetUserId(this.User);
-                var cart = await this.storeService.GetCart(user);
+                var cart = await this.storeService.GetCartAsync(user);
                 return this.View(cart);
             }
             catch (Exception)

@@ -4,10 +4,11 @@ namespace BarberStore.Core.Contracts;
 
 public interface IAnnouncementService
 {
-    public Task<(bool, string)> CreateAnnouncement(string userId, AnnouncementModel? announcement);
+    public Task<(bool, string)> CreateAnnouncementAsync(string mainText);
     public IQueryable<AnnouncementViewModel> GetAllAnnouncementsAsQueryable();
-    public Task<IEnumerable<AnnouncementViewModel>> GetAllAnnouncements();
-    public Task<IEnumerable<AnnouncementViewModel>> GetAllAnnouncements(int count);
-    public Task<IEnumerable<AnnouncementViewModel>> GetAllAnnouncements(int count, int page);
-    public Task<IEnumerable<AnnouncementViewModel>> GetTopAnnouncements();
+    public Task<IEnumerable<AnnouncementViewModel>> GetAllAnnouncementsAsync();
+    public Task<IEnumerable<AnnouncementViewModel>> GetAllAnnouncementsAsync(int count);
+    public Task<IEnumerable<AnnouncementViewModel>> GetAllAnnouncementsAsync(int count, int page);
+    public Task<IEnumerable<AnnouncementViewModel>> GetTopAnnouncementsAsync();
+    Task<bool> RemoveAnnouncementAsync(string id);
 }

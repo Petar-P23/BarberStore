@@ -9,12 +9,18 @@ namespace BarberStore.Web.Areas.Administration.Controllers
     {
         private readonly IHostEnvironment environment;
         private readonly IStoreService storeService;
+        private readonly IServicesService servicesService;
+        private readonly IAnnouncementService announcementService;
 
         public ContentController(IHostEnvironment environment,
-            IStoreService storeService)
+            IStoreService storeService, 
+            IServicesService servicesService, 
+            IAnnouncementService announcementService)
         {
             this.environment = environment;
             this.storeService = storeService;
+            this.servicesService = servicesService;
+            this.announcementService = announcementService;
         }
 
         public IActionResult ManageProducts()
@@ -33,7 +39,7 @@ namespace BarberStore.Web.Areas.Administration.Controllers
         [HttpPost]
         public async Task<IActionResult> AddProduct(string name, string description, decimal price, IFormFile image)
         {
-            if (await this.storeService.CreateNewProduct(name, image.FileName, price, description))
+            if (await this.storeService.CreateNewProductAsync(name, image.FileName, price, description))
             {
                 await SaveImage(image);
             }
@@ -41,6 +47,42 @@ namespace BarberStore.Web.Areas.Administration.Controllers
             return RedirectToAction("ManageProducts");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AddService(string name, string description, decimal price)
+        {
+            await this.servicesService.CreateServiceAsync(name, description, price);
+
+            return RedirectToAction("ManageServices");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddAnnouncement(string mainText)
+        {
+            await this.announcementService.CreateAnnouncementAsync(mainText);
+
+            return RedirectToAction("ManageAnnouncements");
+        }
+        [HttpGet]
+        public async Task<IActionResult> RemoveAnnouncement(string id, string returnUrl)
+        {
+            await this.announcementService.RemoveAnnouncementAsync(id);
+
+            return Redirect(returnUrl);
+        }
+        [HttpGet]
+        public async Task<IActionResult> RemoveService(string id, string returnUrl)
+        {
+            await this.servicesService.RemoveServiceAsync(id);
+
+            return Redirect(returnUrl);
+        }
+        [HttpGet]
+        public async Task<IActionResult> RemoveProduct(string id, string returnUrl)
+        {
+            await this.storeService.RemoveProductAsync(id);
+
+            return Redirect(returnUrl);
+        }
         private async Task<bool> SaveImage(IFormFile image)
         {
             try

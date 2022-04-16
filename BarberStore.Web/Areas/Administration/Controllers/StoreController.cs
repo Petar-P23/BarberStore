@@ -16,7 +16,7 @@ namespace BarberStore.Web.Areas.Administration.Controllers
 
         public async Task<IActionResult> Manage()
         {
-            IEnumerable<OrderViewModel> orders = await this.storeService.GetAllOrdersByStatus(Status.Pending);
+            IEnumerable<OrderViewModel> orders = await this.storeService.GetAllOrdersByStatusAsync(Status.Pending);
             return this.View(orders);
         }
 

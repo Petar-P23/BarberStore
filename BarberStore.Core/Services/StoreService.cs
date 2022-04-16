@@ -16,7 +16,7 @@ public class StoreService : DataService, IStoreService
          : base(repo)
     {
     }
-    public async Task<StorePageViewModel> GetStorePage(int page, int size, string category = "")
+    public async Task<StorePageViewModel> GetStorePageAsync(int page, int size, string category = "")
     {
         return await this.GetStorePage(page, size, p => p.Price, category);
     }
@@ -24,7 +24,7 @@ public class StoreService : DataService, IStoreService
     public async Task<StorePageViewModel> GetStorePage(int page, int size, Expression<Func<Product, object>> orderByExpression, string category = "")
     {
         var noFilter = string.IsNullOrWhiteSpace(category);
-        var pageCount = await this.GetProductPagesCount(size, p => p.Category.Name == category || noFilter);
+        var pageCount = await this.GetProductPagesCountAsync(size, p => p.Category.Name == category || noFilter);
         if (page > pageCount) page = 0;
 
         Guard.AgainstNull(orderByExpression, nameof(orderByExpression));
@@ -50,7 +50,7 @@ public class StoreService : DataService, IStoreService
         };
     }
 
-    public async Task<int> GetProductPagesCount(int size, Expression<Func<Product, bool>> filterExpression)
+    public async Task<int> GetProductPagesCountAsync(int size, Expression<Func<Product, bool>> filterExpression)
     {
         Guard.AgainstNull(filterExpression, nameof(filterExpression));
 
@@ -59,7 +59,7 @@ public class StoreService : DataService, IStoreService
             .CountAsync() / (double)size);
     }
 
-    public async Task<ProductPageViewModel?> GetProductPage(string productId)
+    public async Task<ProductPageViewModel?> GetProductPageAsync(string productId)
     {
         Guard.AgainstNullOrWhiteSpaceString(productId, nameof(productId));
 
@@ -78,7 +78,7 @@ public class StoreService : DataService, IStoreService
         return product;
     }
 
-    public async Task<(bool, string)> AddProductToCart(string? userId, string? productId, int quantity = 1)
+    public async Task<(bool, string)> AddProductToCartAsync(string? userId, string? productId, int quantity = 1)
     {
         try
         {
@@ -114,7 +114,7 @@ public class StoreService : DataService, IStoreService
         return (true, string.Empty);
     }
 
-    public async Task<CartViewModel> GetCart(string? userId)
+    public async Task<CartViewModel> GetCartAsync(string? userId)
     {
         Guard.AgainstNullOrWhiteSpaceString(userId, nameof(userId));
 
@@ -151,7 +151,7 @@ public class StoreService : DataService, IStoreService
 
     }
 
-    public async Task<(bool, string)> PlaceOrder(PlaceOrderProductModel[]? products, string userId)
+    public async Task<(bool, string)> PlaceOrderAsync(PlaceOrderProductModel[]? products, string userId)
     {
         try
         {
@@ -226,7 +226,7 @@ public class StoreService : DataService, IStoreService
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<OrderViewModel>> GetAllOrdersByStatus(Status status)
+    public async Task<IEnumerable<OrderViewModel>> GetAllOrdersByStatusAsync(Status status)
     {
         Guard.AgainstNull(status, nameof(status));
         return await this.repo.All<Order>()
@@ -262,10 +262,10 @@ public class StoreService : DataService, IStoreService
         await this.repo.SaveChangesAsync();
     }
 
-    public async Task<bool> CreateNewProduct(string name, string imageName, decimal price, string description)
-     => await CreateNewProduct(name, imageName, price, description, "General");
+    public async Task<bool> CreateNewProductAsync(string name, string imageName, decimal price, string description)
+     => await CreateNewProductAsync(name, imageName, price, description, "General");
 
-    public async Task<bool> CreateNewProduct(string name, string imageName, decimal price, string description,
+    public async Task<bool> CreateNewProductAsync(string name, string imageName, decimal price, string description,
         string categoryName)
     {
         try
@@ -286,6 +286,21 @@ public class StoreService : DataService, IStoreService
             await this.repo.SaveChangesAsync();
         }
         catch (Exception e)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    public async Task<bool> RemoveProductAsync(string id)
+    {
+        try
+        {
+            await this.repo.DeleteAsync<Product>(Guid.Parse(id));
+            await this.repo.SaveChangesAsync();
+        }
+        catch (Exception)
         {
             return false;
         }

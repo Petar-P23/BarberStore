@@ -26,7 +26,7 @@ namespace BarberStore.Web.Controllers
             if (size <= 0) size = DefaultPageSize;
             if (page <= 0) page = DefaultPage;
 
-            var products = await this.storeService.GetStorePage(page - 1, size, category);
+            var products = await this.storeService.GetStorePageAsync(page - 1, size, category);
             return this.View(products);
         }
         public async Task<IActionResult> Product(string id, string? errors) //
@@ -36,7 +36,7 @@ namespace BarberStore.Web.Controllers
                 return BadRequest(errors);
             }
 
-            var product = await this.storeService.GetProductPage(id);
+            var product = await this.storeService.GetProductPageAsync(id);
 
             return this.View(product);
         }
@@ -51,7 +51,7 @@ namespace BarberStore.Web.Controllers
         {
             if (quantity == 0) quantity = 1;
             var user = this.userManager.GetUserId(this.User);
-            var (success, errors) = await this.storeService.AddProductToCart(user, productId, quantity);
+            var (success, errors) = await this.storeService.AddProductToCartAsync(user, productId, quantity);
             if (success)
                 return RedirectToAction("Explore");
 
@@ -63,7 +63,7 @@ namespace BarberStore.Web.Controllers
         {
             var user = this.userManager.GetUserId(this.User);
 
-            var (success, errors) = await this.storeService.PlaceOrder(products, user);
+            var (success, errors) = await this.storeService.PlaceOrderAsync(products, user);
             if (!success)
             {
                 return BadRequest(errors);

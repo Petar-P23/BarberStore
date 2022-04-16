@@ -16,7 +16,13 @@
     <h3>Description</h3>
     <p>@Model.Description</p>
 </div>
-<div style="position: relative; bottom: 0;"></div>
+<div class="admin" style="position: relative; bottom: 0;">
+
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-area="Administration" asp-controller="Content" asp-action="RemoveProduct" asp-route-id="@Model.Id" asp-route-returnUrl="/Store/Explore">X</a>
+    }
+</div>
 @section Css
 {    
     <link rel="stylesheet" href="~/css/p-page-styles.css">

@@ -40,4 +40,6 @@ public interface IServicesService
     ///// <param name="article"></param>
     ///// <returns>Returns true if creation was successful, else an error is returned.</returns>
     //public Task<(bool, string)> CreateArticle(string userId, ArticleModel? article);
+    Task<bool> CreateServiceAsync(string name, string description, decimal price);
+    Task<bool> RemoveServiceAsync(string id);
 }
