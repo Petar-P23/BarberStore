@@ -1,12 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
-using BarberStore.Core.Contracts;
+﻿using BarberStore.Core.Contracts;
 using BarberStore.Core.Services;
-using BarberStore.Infrastructure.Data.Enums;
 using BarberStore.Infrastructure.Data.Models;
 using BarberStore.Infrastructure.Data.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
+using System;
+using System.Threading.Tasks;
 
 namespace BarberStore.Tests;
 

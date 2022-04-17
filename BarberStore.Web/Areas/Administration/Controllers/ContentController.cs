@@ -1,7 +1,5 @@
-﻿using System.Net.Mime;
-using BarberStore.Core.Contracts;
+﻿using BarberStore.Core.Contracts;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Build.Framework;
 
 namespace BarberStore.Web.Areas.Administration.Controllers
 {
@@ -13,8 +11,8 @@ namespace BarberStore.Web.Areas.Administration.Controllers
         private readonly IAnnouncementService announcementService;
 
         public ContentController(IHostEnvironment environment,
-            IStoreService storeService, 
-            IServicesService servicesService, 
+            IStoreService storeService,
+            IServicesService servicesService,
             IAnnouncementService announcementService)
         {
             this.environment = environment;

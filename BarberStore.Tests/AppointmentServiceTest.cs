@@ -1,14 +1,13 @@
-﻿using System;
-using System.Threading.Tasks;
-using BarberStore.Core.Contracts;
+﻿using BarberStore.Core.Contracts;
 using BarberStore.Core.Models.Appointments;
 using BarberStore.Core.Services;
 using BarberStore.Infrastructure.Data.Enums;
 using BarberStore.Infrastructure.Data.Models;
 using BarberStore.Infrastructure.Data.Repositories;
 using Microsoft.Extensions.DependencyInjection;
-
 using NUnit.Framework;
+using System;
+using System.Threading.Tasks;
 
 namespace BarberStore.Tests
 {
@@ -173,7 +172,7 @@ namespace BarberStore.Tests
         public async Task GetPreviousAppointmentFailsIfWorkStartAndEndIncorrect()
         {
             var service = this.serviceProvider.GetService<IAppointmentService>();
-            Assert.That(() => service.GetPreviousFreeAppointmentAsync(this.appointmentDate,0,0), Is.Null);
+            Assert.That(() => service.GetPreviousFreeAppointmentAsync(this.appointmentDate, 0, 0), Is.Null);
         }
         [Test]
         public async Task GetPreviousAppointmentFailsIfWorkStartAndEndAreEqual()

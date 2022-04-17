@@ -67,4 +67,5 @@ public interface IStoreService
     Task<bool> CreateNewProductAsync(string name, string imageName, decimal price, string description);
     Task<bool> CreateNewProductAsync(string name, string imageName, decimal price, string description, string categoryName);
     Task<bool> RemoveProductAsync(string id);
+    Task<bool> RemoveFromCartAsync(string userId, string productId);
 }

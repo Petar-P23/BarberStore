@@ -1,11 +1,11 @@
-﻿using System;
-using System.Threading.Tasks;
-using BarberStore.Core.Contracts;
+﻿using BarberStore.Core.Contracts;
 using BarberStore.Core.Services;
 using BarberStore.Infrastructure.Data.Models;
 using BarberStore.Infrastructure.Data.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
+using System;
+using System.Threading.Tasks;
 
 namespace BarberStore.Tests;
 
@@ -37,18 +37,18 @@ public class ServicesServiceTest
     [Test]
     public async Task CreateServiceFailsIfAnyParameterIsInvalid()
     {
-        Assert.That(await this.service.CreateServiceAsync(null,"desc",5),Is.False);
-        Assert.That(await this.service.CreateServiceAsync("null","",5),Is.False);
-        Assert.That(await this.service.CreateServiceAsync("null",null,5),Is.False);
-        Assert.That(await this.service.CreateServiceAsync("","desc",5),Is.False);
-        Assert.That(await this.service.CreateServiceAsync("null","desc",0),Is.False);
-        Assert.That(await this.service.CreateServiceAsync("null","desc",-5),Is.False);
+        Assert.That(await this.service.CreateServiceAsync(null, "desc", 5), Is.False);
+        Assert.That(await this.service.CreateServiceAsync("null", "", 5), Is.False);
+        Assert.That(await this.service.CreateServiceAsync("null", null, 5), Is.False);
+        Assert.That(await this.service.CreateServiceAsync("", "desc", 5), Is.False);
+        Assert.That(await this.service.CreateServiceAsync("null", "desc", 0), Is.False);
+        Assert.That(await this.service.CreateServiceAsync("null", "desc", -5), Is.False);
     }
 
     [Test]
     public async Task CreateServicePassesIfDataIsCorrect()
     {
-        Assert.That(await this.service.CreateServiceAsync("test","test",5.5m),Is.True);
+        Assert.That(await this.service.CreateServiceAsync("test", "test", 5.5m), Is.True);
     }
 
     [Test]

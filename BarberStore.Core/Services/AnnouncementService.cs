@@ -60,7 +60,7 @@ public class AnnouncementService : DataService, IAnnouncementService
     }
     public async Task<IEnumerable<AnnouncementViewModel>> GetAllAnnouncementsAsync(int count, int page)
     {
-        if (count <= 0||page<=-1) return null;
+        if (count <= 0 || page <= -1) return null;
 
         return await this.GetAllAnnouncementsAsQueryable()
             .Skip(page * count)

@@ -5,7 +5,6 @@ using BarberStore.Infrastructure.Data.Enums;
 using BarberStore.Infrastructure.Data.Models;
 using BarberStore.Infrastructure.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
 using static BarberStore.Core.Constants.ExceptionMessageConstants;
 
 namespace BarberStore.Core.Services;
@@ -154,7 +153,7 @@ public class AppointmentService : DataService, IAppointmentService
         if (date.Minute is not (30 or 0) || date < DateTime.Now)
         {
             var now = DateTime.Now;
-            date = new DateTime(now.Year, now.Month, now.Day, now.Hour, 30,0);
+            date = new DateTime(now.Year, now.Month, now.Day, now.Hour, 30, 0);
             if (date < now)
             {
                 date = date.AddMinutes(30);
@@ -164,6 +163,11 @@ public class AppointmentService : DataService, IAppointmentService
             {
                 date = date.AddDays(1);
                 date = date.AddHours((date.Hour - workStart) * -1);
+            }
+
+            if (date.Hour <= workStart)
+            {
+                date = date.AddHours(workStart - date.Hour);
             }
         }
 

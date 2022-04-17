@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using BarberStore.Core.Contracts;
+﻿using BarberStore.Core.Contracts;
 using BarberStore.Core.Models.Store;
 using BarberStore.Core.Services;
 using BarberStore.Infrastructure.Data.Enums;
@@ -9,6 +6,9 @@ using BarberStore.Infrastructure.Data.Models;
 using BarberStore.Infrastructure.Data.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BarberStore.Tests;
 
@@ -199,7 +199,7 @@ public class StoreServiceTest
     public void GetOrdersByUserThrowsIfUserIsNull()
     {
         var service = this.serviceProvider.GetService<IStoreService>();
-        Assert.That(()=>service.GetOrdersByUserAsync(null),Throws.ArgumentNullException);
+        Assert.That(() => service.GetOrdersByUserAsync(null), Throws.ArgumentNullException);
     }
 
     [Test]
@@ -283,7 +283,7 @@ public class StoreServiceTest
     public void CreateProductFailsIfAnyParameterIsNull()
     {
         var service = this.serviceProvider.GetService<IStoreService>();
-        Assert.That(() => service.CreateNewProductAsync(null,"test",5,"test"), Is.False);
+        Assert.That(() => service.CreateNewProductAsync(null, "test", 5, "test"), Is.False);
         Assert.That(() => service.CreateNewProductAsync("null", null, 5, "test"), Is.False);
         Assert.That(() => service.CreateNewProductAsync("null", "test", 0, "test"), Is.False);
         Assert.That(() => service.CreateNewProductAsync("null", "test", 5, null), Is.False);

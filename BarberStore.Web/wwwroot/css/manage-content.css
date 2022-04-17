@@ -2,6 +2,12 @@
     height: 100%;
 }
 
+h3 {
+    color: var(--light-brown);
+    text-align: center;
+    font-size: 28pt;
+}
+
 .row form{
     display: flex;
     flex-direction: column;
@@ -34,5 +40,5 @@ form input:not(.submit) {
 }
 
 h3 {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }

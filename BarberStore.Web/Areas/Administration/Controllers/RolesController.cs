@@ -9,7 +9,7 @@ namespace BarberStore.Web.Areas.Administration.Controllers
     {
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly UserManager<ApplicationUser> userManager;
-        public RolesController(RoleManager<IdentityRole> roleManager, 
+        public RolesController(RoleManager<IdentityRole> roleManager,
             UserManager<ApplicationUser> userManager)
         {
             this.roleManager = roleManager;
@@ -17,7 +17,7 @@ namespace BarberStore.Web.Areas.Administration.Controllers
         }
         public async Task<IActionResult> SeedRoles()
         {
-            if(!await this.roleManager.RoleExistsAsync("Admin"))
+            if (!await this.roleManager.RoleExistsAsync("Admin"))
                 await this.roleManager.CreateAsync(new IdentityRole("Admin"));
 
             if (!await this.userManager.Users.AnyAsync(u => u.Email == "admin@test.com"))

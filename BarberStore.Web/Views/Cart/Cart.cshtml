@@ -12,7 +12,7 @@
             </div>
             <p>Price</p>
         </li>
-        @for (int i = 0; i<Model.Products.Count;i++)
+        @for (int i = 0; i < Model.Products.Count; i++)
         {
             var product = Model.Products[i];
 
@@ -24,6 +24,7 @@
                     <input type="hidden" asp-for="Products[i].Id" value="@product.Id">
                 </div>
                 <p>@(product.Price*product.Quantity) lv.</p>
+                <a class="remove" asp-area="" asp-controller="Cart" asp-action="RemoveFromCart" asp-route-id="@product.Id">X</a>
             </li>
         }
     </ul>

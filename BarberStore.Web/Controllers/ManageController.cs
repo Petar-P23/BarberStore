@@ -15,7 +15,7 @@ namespace BarberStore.Web.Controllers
         private IAppointmentService appointmentService;
 
         public ManageController(IStoreService storeService,
-            UserManager<ApplicationUser> userManager, 
+            UserManager<ApplicationUser> userManager,
             IAppointmentService appointmentService)
         {
             this.storeService = storeService;
@@ -34,7 +34,7 @@ namespace BarberStore.Web.Controllers
         public async Task<IActionResult> Appointments()
         {
             var userId = this.userManager.GetUserId(User);
-            IEnumerable<UserAppointmentViewModel> appointments = 
+            IEnumerable<UserAppointmentViewModel> appointments =
                 await this.appointmentService.GetUserAppointmentsAsync(userId);
             return View(appointments);
         }

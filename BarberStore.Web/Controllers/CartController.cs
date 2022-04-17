@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BarberStore.Web.Controllers
 {
+    [Authorize]
     public class CartController : Controller
     {
         private readonly IStoreService storeService;
@@ -17,7 +18,6 @@ namespace BarberStore.Web.Controllers
             this.storeService = storeService;
             this.userManager = userManager;
         }
-        [Authorize]
         public async Task<IActionResult> Cart()
         {
             try
@@ -31,5 +31,20 @@ namespace BarberStore.Web.Controllers
                 return base.NotFound();
             }
         }
+
+        public async Task<IActionResult> RemoveFromCart(string id)
+        {
+            try
+            {
+                var user = this.userManager.GetUserId(this.User);
+                await this.storeService.RemoveFromCartAsync(user, id);
+                return RedirectToAction("Cart");
+            }
+            catch (Exception)
+            {
+                return base.NotFound();
+            }
+        }
+
     }
 }

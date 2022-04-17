@@ -1,11 +1,11 @@
 ﻿using BarberStore.Core.Contracts;
 using BarberStore.Core.Models.Announcements;
 using BarberStore.Core.Models.Appointments;
+using BarberStore.Infrastructure.Data.Models;
 using BarberStore.Web.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using BarberStore.Infrastructure.Data.Models;
-using Microsoft.AspNetCore.Identity;
 
 namespace BarberStore.Web.Controllers
 {
@@ -18,7 +18,7 @@ namespace BarberStore.Web.Controllers
 
         public HomeController(ILogger<HomeController> logger,
             IServicesService servicesService,
-            IAnnouncementService announcementService, 
+            IAnnouncementService announcementService,
             UserManager<ApplicationUser> userManager)
         {
             this._logger = logger;

@@ -25,7 +25,7 @@ public class StoreService : DataService, IStoreService
     {
         var noFilter = string.IsNullOrWhiteSpace(category);
         var pageCount = await this.GetProductPagesCountAsync(size, p => p.Category.Name == category || noFilter);
-        if (page > pageCount) page = 0;
+        if (page >= pageCount) page = 0;
 
         Guard.AgainstNull(orderByExpression, nameof(orderByExpression));
 
@@ -321,6 +321,29 @@ public class StoreService : DataService, IStoreService
         {
             Guard.AgainstNullOrWhiteSpaceString(id);
             await this.repo.DeleteAsync<Product>(Guid.Parse(id));
+            await this.repo.SaveChangesAsync();
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    public async Task<bool> RemoveFromCartAsync(string userId, string productId)
+    {
+        try
+        {
+            Guard.AgainstNullOrWhiteSpaceString(userId, nameof(userId));
+            Guard.AgainstNullOrWhiteSpaceString(productId, nameof(productId));
+
+            var cp = await this.repo.All<CartProduct>()
+                .Where(cp => cp.ProductId == Guid.Parse(productId) && cp.Cart.UserId == userId && cp.Ordered == false)
+                .FirstOrDefaultAsync();
+            Guard.AgainstNull(cp, "Product");
+
+            await this.repo.DeleteAsync<CartProduct>(cp.Id);
             await this.repo.SaveChangesAsync();
         }
         catch (Exception)

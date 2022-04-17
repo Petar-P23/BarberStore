@@ -20,7 +20,7 @@ namespace BarberStore.Web.Areas.Administration.Controllers
         public async Task<IActionResult> Manage(DateTime date)
         {
             var appointments = await this.appointmentService.GetAllAppointmentsByDateAsync(date);
-            return this.View("Manage",appointments);
+            return this.View("Manage", appointments);
         }
 
         [HttpGet]
